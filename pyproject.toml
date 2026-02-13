@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "genai-master-samples"
+version = "0.1.0"
+description = "A Streamlit-based chat application that interacts with AI agents using LangChain and OpenAI"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+license = "MIT"
+packages = [{include = "agents"}]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.15"
+streamlit = "^1.30.0"
+langchain = ">=0.3.0"
+langchain-openai = ">=0.3.0"
+langchain-community = ">=0.3.0"
+langchain-google-genai = ">=2.0.0"
+langchain-core = ">=0.3.0"
+python-dotenv = "^1.0.0"
+openai = ">=1.10.0"
+google-generativeai = ">=0.8.0"
+faiss-cpu = "^1.9.0"
+sentence-transformers = "^3.0.0"
+langgraph = ">=0.2.0"
+# Dependências para RAG multi-formato
+pypdf = ">=4.0.0"           # Para arquivos PDF
+pandas = ">=2.0.0"          # Para arquivos CSV
+python-docx = ">=1.0.0"     # Para arquivos Word (.docx)
+# Dependências para Web Search
+ddgs = ">=7.0.0"                # Busca web gratuita (sem API key)
+tavily-python = {version = ">=0.3.0", optional = true}  # Busca otimizada para LLMs
+wikipedia = ">=1.4.0"           # Busca na Wikipedia
+# Dependências para MCP (Model Context Protocol)
+mcp = ">=1.0.0"                 # Cliente MCP
+langchain-mcp-adapters = ">=0.1.0"  # Adaptadores LangChain para MCP
+# Dependências para API REST
+fastapi = ">=0.109.0"           # Framework web moderno
+uvicorn = {version = ">=0.27.0", extras = ["standard"]}  # Servidor ASGI
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+black = "^24.0.0"
+isort = "^5.13.0"
+mypy = "^1.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+

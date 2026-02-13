@@ -1,0 +1,78 @@
+# ============================================
+# GenAI Master Samples - Docker Ignore
+# ============================================
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv
+venv
+ENV
+env
+.eggs
+*.egg-info
+*.egg
+
+# Poetry
+poetry.lock
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Testes e cobertura
+.pytest_cache
+.coverage
+htmlcov
+.tox
+.nox
+
+# Logs
+logs/*
+*.log
+
+# Dados locais
+data/*
+*.db
+*.sqlite
+
+# Arquivos de ambiente (as chaves vêm via env vars)
+.env
+.env.local
+.env.*.local
+
+# Documentação
+docs
+*.md
+!README.md
+
+# Docker
+Dockerfile*
+docker-compose*
+.docker
+
+# Streamlit (não precisa na API)
+.streamlit
+
+# Arquivos temporários
+tmp
+temp
+*.tmp
+*.temp
+
+# Arquivos de cache
+.cache
+.ruff_cache
+.mypy_cache
+

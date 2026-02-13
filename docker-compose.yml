@@ -1,0 +1,86 @@
+# ============================================
+# GenAI Master Samples - Docker Compose
+# ============================================
+#
+# Uso:
+#   docker-compose up -d        # Inicia em background
+#   docker-compose logs -f      # Ver logs
+#   docker-compose down         # Para e remove
+#
+# Com build:
+#   docker-compose up -d --build
+# ============================================
+
+version: '3.8'
+
+services:
+  # ===========================================
+  # API - FastAPI com Agentes
+  # ===========================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: genai-api:latest
+    container_name: genai-api
+    restart: unless-stopped
+
+    ports:
+      - "${API_PORT:-8000}:8000"
+
+    environment:
+      # LLM APIs
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      # APIs de Tools (opcionais)
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY:-}
+      - TAVILY_API_KEY=${TAVILY_API_KEY:-}
+      # Configuração
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - API_AUTH_REQUIRED=${API_AUTH_REQUIRED:-false}
+      - API_AUTH_KEY=${API_AUTH_KEY:-}
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+
+    volumes:
+      # Persistência de dados (opcional)
+      - genai-data:/app/data
+      - genai-logs:/app/logs
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    networks:
+      - genai-network
+
+    # Limites de recursos (ajuste conforme necessário)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+# ===========================================
+# Volumes persistentes
+# ===========================================
+volumes:
+  genai-data:
+    driver: local
+  genai-logs:
+    driver: local
+
+# ===========================================
+# Rede
+# ===========================================
+networks:
+  genai-network:
+    driver: bridge
+
