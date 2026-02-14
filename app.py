@@ -72,7 +72,7 @@ AVAILABLE_AGENTS = {
         "extra_params": ["top_k"],
         "provider": "google"
     },
-    "OpenAI": {
+    "Tools (OpenAI)": {
         "class": OpenAIAgent,
         "description": "Agente usando OpenAI GPT-4 com tools",
         "api_key_env": "OPENAI_API_KEY",
@@ -81,7 +81,7 @@ AVAILABLE_AGENTS = {
         # Parâmetros específicos do OpenAI
         "extra_params": ["presence_penalty", "frequency_penalty"]
     },
-    "Gemini": {
+    "Tools (Gemini)": {
         "class": GeminiAgent,
         "description": "Agente usando Google Gemini com tools",
         "api_key_env": "GOOGLE_API_KEY",
