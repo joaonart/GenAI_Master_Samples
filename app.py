@@ -1248,9 +1248,14 @@ def main():
     # CRIAR/ATUALIZAR AGENTE
     # -----------------------------------------------------------------
     # Verifica se precisa criar um novo agente
+    # Isso acontece quando:
+    # 1. Não existe agente ainda
+    # 2. O tipo de agente mudou (ex: OpenAI -> Gemini)
+    # 3. O modelo mudou (ex: gpt-4 -> gpt-4o)
     need_new_agent = (
         st.session_state.agent is None or
-        st.session_state.current_agent_name != config["agent_name"]
+        st.session_state.current_agent_name != config["agent_name"] or
+        st.session_state.current_model != config["model"]
     )
 
     if need_new_agent:
@@ -1276,9 +1281,10 @@ def main():
             if agent:
                 st.session_state.agent = agent
                 st.session_state.current_agent_name = config["agent_name"]
+                st.session_state.current_model = config["model"]  # Atualiza o modelo atual
                 # Salva a configuração no chat ativo
                 sync_active_chat(config)
-                st.toast(f"Agente {config['agent_name']} selecionado!", icon="✅")
+                st.toast(f"Agente {config['agent_name']} ({config['model']}) ativado!", icon="✅")
 
     agent = st.session_state.agent
 
