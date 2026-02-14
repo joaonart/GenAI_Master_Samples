@@ -117,7 +117,7 @@ class OllamaAgent(BaseAgent):
         self,
         name: str = "Ollama Assistant",
         description: str = "Assistente IA local powered by Ollama",
-        model: str = "llama3.2",
+        model: str = "gemma3",
         temperature: float = 0.7,
         num_ctx: int = 4096,
         num_predict: Optional[int] = None,

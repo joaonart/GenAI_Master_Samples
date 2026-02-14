@@ -95,7 +95,7 @@ AVAILABLE_AGENTS = {
         "description": "Agente usando modelos locais via Ollama (sem API key!)",
         "api_key_env": None,  # Ollama não precisa de API key
         "api_key_url": "https://ollama.ai",
-        "models": ["llama3.2", "llama3.1", "mistral", "codellama", "phi3", "gemma2", "qwen2.5"],
+        "models": ["llama3.2", "llama3.1", "mistral", "codellama", "phi3", "gemma2", "gemma3", "qwen2.5"],
         # Parâmetros específicos do Ollama
         "extra_params": ["num_ctx", "repeat_penalty"],
         "is_local": True
@@ -455,22 +455,30 @@ def get_active_chat():
 
 
 def create_new_chat():
-    """Cria um novo chat e o torna ativo."""
+    """Cria um novo chat e o torna ativo, preservando o agente selecionado."""
+    # Guarda o agente e modelo do chat atual antes de criar o novo
+    current_chat = st.session_state.chats.get(st.session_state.active_chat_id, {})
+    current_agent_name = current_chat.get("agent_name") or st.session_state.current_agent_name
+    current_model = current_chat.get("model") or st.session_state.current_model
+    current_config = current_chat.get("config") or st.session_state.current_config
+
     st.session_state.chat_counter += 1
     new_id = f"chat_{st.session_state.chat_counter}"
     st.session_state.chats[new_id] = {
         "name": f"Chat {st.session_state.chat_counter}",
         "messages": [],
-        "agent": None,
-        "agent_name": None,
-        "model": None,
-        "config": None
+        "agent": None,  # Será recriado quando o usuário enviar mensagem
+        "agent_name": current_agent_name,  # Preserva o agente selecionado
+        "model": current_model,  # Preserva o modelo selecionado
+        "config": current_config  # Preserva as configurações
     }
     st.session_state.active_chat_id = new_id
     # Sincroniza com variáveis de compatibilidade
     st.session_state.messages = []
-    st.session_state.agent = None
-    st.session_state.current_agent_name = None
+    st.session_state.agent = None  # Será recriado
+    # Mantém o agente e modelo selecionados (não reseta para None)
+    # st.session_state.current_agent_name permanece o mesmo
+    # st.session_state.current_model permanece o mesmo
     return new_id
 
 
