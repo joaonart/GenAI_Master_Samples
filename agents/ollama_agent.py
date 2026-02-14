@@ -108,10 +108,29 @@ class OllamaAgent(BaseAgent):
         "phi3:medium": "Phi-3 Medium - Versão intermediária",
         "gemma2": "Google Gemma 2 - Eficiente e bem treinado",
         "gemma2:27b": "Gemma 2 27B - Versão maior",
+        "gemma3": "Google Gemma 3 - Mais recente (sem suporte a tools)",
         "qwen2.5": "Alibaba Qwen 2.5 - Bom em múltiplas línguas",
         "qwen2.5-coder": "Qwen 2.5 Coder - Especializado em código",
         "deepseek-coder-v2": "DeepSeek Coder V2 - Excelente para código",
     }
+
+    # Modelos que NÃO suportam tools/function calling
+    # Estes modelos serão usados em modo de chat simples
+    MODELS_WITHOUT_TOOLS = [
+        "gemma",       # Todas as versões do Gemma
+        "gemma2",
+        "gemma3",
+        "phi",         # Phi-1, Phi-2
+        "phi3",        # Phi-3 (algumas versões)
+        "tinyllama",
+        "orca-mini",
+        "vicuna",
+        "wizardlm",
+        "falcon",
+        "starcoder",
+        "codellama",   # CodeLlama foca em código, tools limitado
+        "deepseek-coder",
+    ]
 
     def __init__(
         self,
@@ -176,6 +195,9 @@ class OllamaAgent(BaseAgent):
         self.base_url = base_url
         self.model_name = model
 
+        # Verifica se o modelo suporta tools
+        self.supports_tools = self._check_tools_support(model)
+
         # Inicializar o LLM Ollama
         # Nota: Ollama usa parâmetros diferentes da OpenAI
         self.llm = ChatOllama(
@@ -189,12 +211,16 @@ class OllamaAgent(BaseAgent):
             base_url=base_url,
         )
 
-        # Configurar Tools
-        self.tools = list(tools) if tools is not None else list(self.DEFAULT_TOOLS)
+        # Configurar Tools (apenas se o modelo suportar)
+        if self.supports_tools:
+            self.tools = list(tools) if tools is not None else list(self.DEFAULT_TOOLS)
+        else:
+            self.tools = []  # Modelo não suporta tools
 
-        # Configurar RAG se fornecido
+        # Configurar RAG se fornecido (apenas se suportar tools)
         self.vector_store_manager = vector_store_manager
-        self._setup_rag()
+        if self.supports_tools:
+            self._setup_rag()
 
         # Configurar Memória
         self.memory_type = memory_type
@@ -208,8 +234,30 @@ class OllamaAgent(BaseAgent):
         # System Prompt
         self.system_prompt = system_prompt or self._get_default_system_prompt()
 
-        # Criar agente ReAct com LangGraph
+        # Criar agente ReAct com LangGraph (ou chat simples se não suportar tools)
         self._create_agent()
+
+    def _check_tools_support(self, model: str) -> bool:
+        """
+        Verifica se o modelo suporta function calling/tools.
+
+        Alguns modelos do Ollama não suportam tools nativamente.
+        Nesse caso, usamos modo de chat simples.
+
+        Args:
+            model: Nome do modelo (ex: "llama3.2", "gemma3")
+
+        Returns:
+            True se suporta tools, False caso contrário
+        """
+        model_lower = model.lower()
+
+        # Verifica se o modelo está na lista de modelos sem suporte
+        for no_tools_model in self.MODELS_WITHOUT_TOOLS:
+            if no_tools_model in model_lower:
+                return False
+
+        return True
 
     def _setup_memory(
         self,
@@ -253,7 +301,7 @@ class OllamaAgent(BaseAgent):
 
     def _setup_rag(self):
         """Configura o RAG se o vector store estiver disponível."""
-        if self.vector_store_manager is not None:
+        if self.vector_store_manager is not None and self.supports_tools:
             # Configura o vector store global para a tool
             set_vector_store(self.vector_store_manager)
             # Adiciona a tool de RAG se ainda não estiver na lista
@@ -266,23 +314,26 @@ class OllamaAgent(BaseAgent):
 Você é {self.name}, {self.description}.
 
 Você está rodando localmente através do Ollama usando o modelo {self.model_name}.
+"""
 
+        # Se o modelo suporta tools, lista as ferramentas disponíveis
+        if self.supports_tools:
+            base_prompt += """
 Você tem acesso às seguintes ferramentas:
 - calculator: Para fazer cálculos matemáticos
 - get_current_datetime: Para saber a data e hora atual
 - web_search: Para buscar informações na web
 """
-        # Adiciona instruções de RAG se habilitado
-        if self.vector_store_manager is not None:
-            base_prompt += """- knowledge_base_search: Para buscar informações na base de conhecimento
+            # Adiciona instruções de RAG se habilitado
+            if self.vector_store_manager is not None:
+                base_prompt += """- knowledge_base_search: Para buscar informações na base de conhecimento
 
 IMPORTANTE SOBRE A BASE DE CONHECIMENTO:
 - Use knowledge_base_search quando o usuário perguntar sobre documentos específicos
 - A base de conhecimento contém documentos que foram carregados pelo usuário
 - Sempre cite a fonte quando usar informações da base de conhecimento
 """
-
-        base_prompt += """
+            base_prompt += """
 INSTRUÇÕES:
 1. Use as ferramentas quando necessário
 2. Para data/hora, use get_current_datetime
@@ -290,14 +341,39 @@ INSTRUÇÕES:
 4. Responda em português brasileiro
 5. Seja conciso e direto nas respostas
 """
+        else:
+            # Modelo sem suporte a tools - modo chat simples
+            base_prompt += """
+NOTA: Este modelo não suporta ferramentas externas (tools).
+Responda às perguntas usando apenas seu conhecimento interno.
+
+INSTRUÇÕES:
+1. Responda em português brasileiro
+2. Seja conciso e direto nas respostas
+3. Se não souber algo, diga honestamente
+4. Para cálculos complexos, explique o raciocínio passo a passo
+"""
         return base_prompt
 
     def _create_agent(self):
-        """Cria o agente ReAct usando LangGraph."""
-        self.agent = create_react_agent(
-            model=self.llm,
-            tools=self.tools,
-        )
+        """
+        Cria o agente ReAct usando LangGraph.
+
+        Se o modelo não suportar tools, cria um agente sem ferramentas
+        que funciona em modo de chat simples.
+        """
+        if self.supports_tools and self.tools:
+            # Modelo suporta tools - cria agente ReAct completo
+            self.agent = create_react_agent(
+                model=self.llm,
+                tools=self.tools,
+            )
+        else:
+            # Modelo não suporta tools - cria agente sem ferramentas
+            self.agent = create_react_agent(
+                model=self.llm,
+                tools=[],  # Sem ferramentas
+            )
 
     def set_vector_store(self, manager):
         """
@@ -440,6 +516,25 @@ INSTRUÇÕES:
                     "- codellama\n"
                     "- phi3"
                 )
+            elif "does not support tools" in error_msg.lower() or "status code: 400" in error_msg.lower():
+                # Modelo não suporta tools - desabilita e tenta novamente
+                if self.supports_tools:
+                    self.supports_tools = False
+                    self.tools = []
+                    self._create_agent()
+                    self.system_prompt = self._get_default_system_prompt()
+                    # Tenta processar novamente sem tools
+                    return self.process_message(message)
+                else:
+                    return (
+                        f"❌ Erro: O modelo '{self.model_name}' não suporta ferramentas (tools).\n\n"
+                        "Este modelo funciona apenas em modo de chat simples.\n"
+                        "Tente perguntar novamente ou use um modelo com suporte a tools como:\n"
+                        "- llama3.2\n"
+                        "- llama3.1\n"
+                        "- mistral\n"
+                        "- qwen2.5"
+                    )
 
             return f"❌ Erro: {error_msg}"
 
@@ -499,7 +594,8 @@ INSTRUÇÕES:
             "type": self.memory_type,
             "enabled": self.memory is not None,
             "model": self.model_name,
-            "base_url": self.base_url
+            "base_url": self.base_url,
+            "supports_tools": self.supports_tools
         }
 
         if self.memory_type == "short_term" and self.memory:
@@ -516,17 +612,22 @@ INSTRUÇÕES:
         return info
 
     def add_tool(self, tool: BaseTool) -> None:
-        """Adiciona uma nova tool ao agente."""
+        """Adiciona uma nova tool ao agente (se o modelo suportar)."""
+        if not self.supports_tools:
+            print(f"⚠️ Modelo '{self.model_name}' não suporta tools. Tool não adicionada.")
+            return
         self.tools.append(tool)
         self._create_agent()
 
     def list_tools(self) -> List[str]:
         """Lista os nomes das tools disponíveis."""
+        if not self.supports_tools:
+            return ["(modelo não suporta tools)"]
         return [tool.name for tool in self.tools]
 
     def has_rag(self) -> bool:
-        """Retorna True se o RAG está habilitado."""
-        return self.vector_store_manager is not None
+        """Retorna True se o RAG está habilitado e o modelo suporta tools."""
+        return self.vector_store_manager is not None and self.supports_tools
 
     @classmethod
     def list_popular_models(cls) -> dict:
@@ -558,6 +659,17 @@ INSTRUÇÕES:
             >>> agent.change_model("codellama")  # Troca para CodeLlama
         """
         self.model_name = model
+
+        # Verifica se o novo modelo suporta tools
+        self.supports_tools = self._check_tools_support(model)
+
+        # Atualiza tools baseado no suporte
+        if not self.supports_tools:
+            self.tools = []
+        elif not self.tools:
+            # Se mudou para um modelo que suporta tools, restaura as tools padrão
+            self.tools = list(self.DEFAULT_TOOLS)
+
         self.llm = ChatOllama(
             model=model,
             temperature=self.llm.temperature,
