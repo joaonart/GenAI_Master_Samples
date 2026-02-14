@@ -53,6 +53,7 @@ Este projeto foi desenvolvido para ensinar os conceitos fundamentais de **Agente
 ### 🤖 Agentes
 - ✅ **OpenAI** - GPT-4, GPT-4o, GPT-4o-mini
 - ✅ **Google Gemini** - Gemini 2.5 Flash, 2.0 Flash, 1.5 Pro
+- ✅ **Ollama (Local)** - Llama 3.2, Mistral, CodeLlama, Phi-3, etc. **(sem API key!)**
 - ✅ **Especializados** - Finance, Knowledge, Web Search
 - ✅ **MCP** - Conexão com servidores externos
 
@@ -109,6 +110,24 @@ OPENAI_API_KEY=sk-sua-chave-aqui
 GOOGLE_API_KEY=sua-chave-aqui
 ```
 
+### 🦙 Usando Ollama (Opcional - Gratuito e Local!)
+
+Se preferir rodar modelos **localmente sem API key**:
+
+```bash
+# 1. Instale o Ollama (https://ollama.ai)
+# macOS:
+brew install ollama
+
+# 2. Baixe um modelo (ex: Llama 3.2)
+ollama pull llama3.2
+
+# 3. O servidor inicia automaticamente, ou execute:
+ollama serve
+```
+
+> 💡 **Vantagens do Ollama**: Gratuito, privado (dados não saem do PC), funciona offline!
+
 ### 4️⃣ Execute!
 
 ```bash
@@ -147,6 +166,7 @@ GenAI_Master_Samples/
 │   ├── simple_agent.py          # Agente simples (sem tools)
 │   ├── openai_agent.py          # Agente OpenAI completo
 │   ├── gemini_agent.py          # Agente Gemini completo
+│   ├── ollama_agent.py          # 🦙 Agente Ollama (local)
 │   ├── finance_agent.py         # 💰 Especialista em finanças
 │   ├── knowledge_agent.py       # 📚 Especialista em conhecimento
 │   ├── websearch_agent.py       # 🔍 Especialista em pesquisa
@@ -186,6 +206,7 @@ GenAI_Master_Samples/
 | `simple-gemini` | Simple Agent | Google | Geral | ❌ |
 | `openai` | OpenAI Agent | OpenAI | Geral | ✅ |
 | `gemini` | Gemini Agent | Google | Geral | ✅ |
+| `ollama` | **Ollama Agent** | **Local** | Geral | ✅ |
 | `finance-openai` | Finance Expert | OpenAI | 💰 Finanças | ✅ |
 | `finance-gemini` | Finance Expert | Google | 💰 Finanças | ✅ |
 | `knowledge-openai` | Knowledge Expert | OpenAI | 📚 Conhecimento | ✅ |
@@ -194,6 +215,8 @@ GenAI_Master_Samples/
 | `websearch-gemini` | Web Search Expert | Google | 🔍 Pesquisa | ✅ |
 | `mcp-fetch` | MCP Fetch | OpenAI | 🔌 URLs | MCP |
 | `mcp-time` | MCP Time | OpenAI | 🔌 Data/Hora | MCP |
+
+> 🦙 **Ollama**: Roda modelos localmente, sem API key, com total privacidade!
 
 ---
 
@@ -619,7 +642,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 <div align="center">
 
-**Feito com ❤️ para o Curso Master de GenAI**
+**GenAI Master**
 
 🎓 2026
 

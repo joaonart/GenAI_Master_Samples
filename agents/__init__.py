@@ -15,6 +15,7 @@ Agentes disponíveis:
 - SimpleAgent: Agente simples de chat (sem tools/RAG)
 - OpenAIAgent: Agente com GPT-4 e tools
 - GeminiAgent: Agente com Google Gemini e tools
+- OllamaAgent: Agente com modelos locais via Ollama (sem API key!)
 - FinanceAgent: Agente especialista em finanças
 - KnowledgeAgent: Agente especialista em conhecimento (Wikipedia)
 - WebSearchAgent: Agente especialista em pesquisa web
@@ -27,11 +28,19 @@ Tipos de Memória:
 - CombinedMemory: Combina curto e longo prazo
 
 Exemplo de uso:
-    from agents import OpenAIAgent, FinanceAgent, KnowledgeAgent, WebSearchAgent
+    from agents import OpenAIAgent, GeminiAgent, OllamaAgent
+    from agents import FinanceAgent, KnowledgeAgent, WebSearchAgent
 
-    # Agente genérico
+    # Agente OpenAI (requer OPENAI_API_KEY)
     agent = OpenAIAgent()
     response = agent.process_message("Olá, quanto é 2+2?")
+
+    # Agente Ollama (LOCAL - sem API key!)
+    ollama = OllamaAgent(model="llama3.2")
+    response = ollama.process_message("Olá! Quanto é 15 * 7?")
+
+    # Ver modelos disponíveis no Ollama
+    print(OllamaAgent.list_popular_models())
 
     # Agente especialista em finanças
     finance = FinanceAgent(provider="openai")
@@ -55,6 +64,7 @@ Exemplo de uso:
 from .base_agent import BaseAgent
 from .openai_agent import OpenAIAgent
 from .gemini_agent import GeminiAgent
+from .ollama_agent import OllamaAgent
 from .simple_agent import SimpleAgent
 from .finance_agent import FinanceAgent
 from .knowledge_agent import KnowledgeAgent
@@ -79,6 +89,7 @@ __all__ = [
     "BaseAgent",
     "OpenAIAgent",
     "GeminiAgent",
+    "OllamaAgent",
     "SimpleAgent",
     "FinanceAgent",
     "KnowledgeAgent",

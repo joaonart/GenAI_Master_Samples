@@ -233,6 +233,26 @@ class AgentRegistry:
         except ImportError as e:
             print(f"⚠️ Erro ao importar WebSearchAgent: {e}")
 
+        # Ollama Agent (Local - sem API key)
+        try:
+            from agents import OllamaAgent
+
+            self._agents["ollama"] = {
+                "class": OllamaAgent,
+                "name": "Ollama Agent (Local)",
+                "description": "Agente local via Ollama - não precisa de API key! Suporta Llama, Mistral, etc.",
+                "provider": "ollama",
+                "requires_api_key": None,  # Ollama não precisa de API key!
+                "models": ["llama3.2", "llama3.1", "mistral", "codellama", "phi3", "gemma2", "gemma3", "qwen2.5"],
+                "default_model": "llama3.2",
+                "has_tools": True,
+                "has_rag": True,
+                "is_local": True,
+                "base_url": "http://localhost:11434"
+            }
+        except ImportError as e:
+            print(f"⚠️ Erro ao importar OllamaAgent: {e}")
+
         # MCP Agents
         try:
             from agents import MCPAgent, MCPAgentDemo

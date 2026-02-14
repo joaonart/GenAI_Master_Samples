@@ -25,7 +25,7 @@ from dotenv import load_dotenv
 import os
 
 # Importa os agentes disponíveis
-from agents import OpenAIAgent, GeminiAgent, SimpleAgent, FinanceAgent, KnowledgeAgent, WebSearchAgent, MCPAgentDemo, MEMORY_TYPES
+from agents import OpenAIAgent, GeminiAgent, OllamaAgent, SimpleAgent, FinanceAgent, KnowledgeAgent, WebSearchAgent, MCPAgentDemo, MEMORY_TYPES
 
 # Tenta importar MCPAgent real (requer dependências extras)
 try:
@@ -89,6 +89,16 @@ AVAILABLE_AGENTS = {
         "models": ["gemini-2.5-flash", "gemini-2.0-flash"],
         # Parâmetros específicos do Gemini
         "extra_params": ["top_k"]
+    },
+    "🦙 Ollama (Local)": {
+        "class": OllamaAgent,
+        "description": "Agente usando modelos locais via Ollama (sem API key!)",
+        "api_key_env": None,  # Ollama não precisa de API key
+        "api_key_url": "https://ollama.ai",
+        "models": ["llama3.2", "llama3.1", "mistral", "codellama", "phi3", "gemma2", "qwen2.5"],
+        # Parâmetros específicos do Ollama
+        "extra_params": ["num_ctx", "repeat_penalty"],
+        "is_local": True
     },
     "💰 Finance (OpenAI)": {
         "class": FinanceAgent,
@@ -360,6 +370,14 @@ def create_agent(
         # Adiciona parâmetros específicos do Gemini
         if "Gemini" in agent_name or "Finance (Gemini)" in agent_name:
             common_params["top_k"] = top_k
+
+        # Adiciona parâmetros específicos do Ollama
+        if "Ollama" in agent_name:
+            # Ollama não usa max_tokens, usa num_predict
+            common_params["num_predict"] = max_tokens
+            del common_params["max_tokens"]
+            # Adiciona vector_store_manager para RAG
+            common_params["vector_store_manager"] = vector_store_manager
 
         # Adiciona parâmetros específicos do MCP
         if "mcp_server" in agent_config:
@@ -749,33 +767,65 @@ def display_sidebar():
                            """
                 )
 
+            # Parâmetros específicos do Ollama
+            if "Ollama" in selected_agent:
+                st.markdown("---")
+                st.markdown("##### Parâmetros Ollama")
+                st.info("🦙 Ollama roda localmente - não precisa de API key!")
+
+                top_k = st.slider(
+                    "Top K",
+                    min_value=1,
+                    max_value=100,
+                    value=40,
+                    step=1,
+                    help="""
+                           Considera apenas os K tokens mais prováveis.
+                           - Valores baixos (1-10) = Mais determinístico
+                           - Valores médios (20-40) = Balanceado
+                           - Valores altos (50-100) = Mais diversidade
+                           """
+                )
+
         # -----------------------------------------------------------------
-        # API KEY
+        # API KEY (não mostrar para Ollama)
         # -----------------------------------------------------------------
         st.subheader("3. Configure o Acesso")
 
-        with st.expander("Informar API Key", expanded=False):
-            st.caption("Configurar API Key para o agente funcionar")
+        # Ollama não precisa de API Key
+        is_local_agent = agent_config.get("is_local", False)
 
-            api_key_env = agent_config["api_key_env"]
-            current_key = os.getenv(api_key_env, "")
+        if is_local_agent:
+            st.success("✅ Este agente roda localmente via Ollama - não precisa de API key!")
+            st.markdown("""
+            **Certifique-se de que:**
+            1. Ollama está instalado ([baixe aqui](https://ollama.ai))
+            2. O servidor está rodando (execute `ollama serve` no terminal)
+            3. O modelo está baixado (execute `ollama pull llama3.2`)
+            """)
+        else:
+            with st.expander("Informar API Key", expanded=False):
+                st.caption("Configurar API Key para o agente funcionar")
 
-            api_key = st.text_input(
-                f"{api_key_env}",
-                value=current_key,
-                type="password",
-                help=f"Obtenha em: {agent_config['api_key_url']}"
-            )
+                api_key_env = agent_config["api_key_env"]
+                current_key = os.getenv(api_key_env, "")
 
-            # Atualiza a variável de ambiente se mudou
-            if api_key and api_key != current_key:
-                os.environ[api_key_env] = api_key
-                # Força recriar o agente
-                if "agent" in st.session_state:
-                    st.session_state.agent = None
+                api_key = st.text_input(
+                    f"{api_key_env}",
+                    value=current_key,
+                    type="password",
+                    help=f"Obtenha em: {agent_config['api_key_url']}"
+                )
 
-            # Link para obter API key
-            st.markdown(f"[🔑 Obter API Key]({agent_config['api_key_url']})")
+                # Atualiza a variável de ambiente se mudou
+                if api_key and api_key != current_key:
+                    os.environ[api_key_env] = api_key
+                    # Força recriar o agente
+                    if "agent" in st.session_state:
+                        st.session_state.agent = None
+
+                # Link para obter API key
+                st.markdown(f"[🔑 Obter API Key]({agent_config['api_key_url']})")
 
         st.divider()
 
