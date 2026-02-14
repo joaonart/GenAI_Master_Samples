@@ -310,8 +310,7 @@ class OllamaAgent(BaseAgent):
 
     def _get_default_system_prompt(self):
         """Retorna o system prompt padrão."""
-        base_prompt = f"""
-Você é {self.name}, {self.description}.
+        base_prompt = f"""Você é {self.name}, {self.description}.
 
 Você está rodando localmente através do Ollama usando o modelo {self.model_name}.
 """

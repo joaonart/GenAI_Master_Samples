@@ -175,30 +175,30 @@ class GeminiAgent(BaseAgent):
     def _get_default_system_prompt(self):
         """Retorna o system prompt padrão."""
         base_prompt = f"""
-Você é {self.name}, {self.description}.
-
-Você tem acesso às seguintes ferramentas:
-- calculator: Para fazer cálculos matemáticos
-- get_current_datetime: Para saber a data e hora atual
-- web_search: Para buscar informações na web
-"""
+        Você é {self.name}, {self.description}.
+        
+        Você tem acesso às seguintes ferramentas:
+        - calculator: Para fazer cálculos matemáticos
+        - get_current_datetime: Para saber a data e hora atual
+        - web_search: Para buscar informações na web
+        """
         # Adiciona instruções de RAG se habilitado
         if self.vector_store_manager is not None:
             base_prompt += """- knowledge_base_search: Para buscar informações na base de conhecimento
 
-IMPORTANTE SOBRE A BASE DE CONHECIMENTO:
-- Use knowledge_base_search quando o usuário perguntar sobre documentos específicos
-- A base de conhecimento contém documentos que foram carregados pelo usuário
-- Sempre cite a fonte quando usar informações da base de conhecimento
-"""
+            IMPORTANTE SOBRE A BASE DE CONHECIMENTO:
+            - Use knowledge_base_search quando o usuário perguntar sobre documentos específicos
+            - A base de conhecimento contém documentos que foram carregados pelo usuário
+            - Sempre cite a fonte quando usar informações da base de conhecimento
+            """
 
         base_prompt += """
-INSTRUÇÕES:
-1. Use as ferramentas quando necessário
-2. Para data/hora, use get_current_datetime
-3. Para cálculos, use calculator
-4. Responda em português brasileiro
-"""
+        INSTRUÇÕES:
+        1. Use as ferramentas quando necessário
+        2. Para data/hora, use get_current_datetime
+        3. Para cálculos, use calculator
+        4. Responda em português brasileiro
+        """
         return base_prompt
 
     def _create_agent(self):

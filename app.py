@@ -848,12 +848,12 @@ def display_sidebar():
                 "Mensagem inicial exibida no chat",
                 value="""Olá! 👋 Sou seu assistente de IA.
 
-Posso ajudá-lo com:
-• Cálculos matemáticos
-• Informações de data e hora
-• Pesquisas na web
-
-Como posso ajudar você hoje?""",
+                Posso ajudá-lo com:
+                • Cálculos matemáticos
+                • Informações de data e hora
+                • Pesquisas na web
+                
+                Como posso ajudar você hoje?""",
             height=120,
             help="""
             Mensagem exibida quando o chat é iniciado.
@@ -866,8 +866,8 @@ Como posso ajudar você hoje?""",
             system_prompt = st.text_area(
                 "Define o comportamento do agente",
                 value="""Você é um assistente útil e amigável.
-    Responda de forma clara e educada.
-    Use as ferramentas disponíveis quando necessário.""",
+                Responda de forma clara e educada.
+                Use as ferramentas disponíveis quando necessário.""",
                 height=120,
                 help="""
                 Define o comportamento e personalidade do agente.
@@ -881,11 +881,11 @@ Como posso ajudar você hoje?""",
             guardrails = st.text_area(
                 "Regras de Segurança e Limites",
                 value="""REGRAS QUE VOCÊ DEVE SEGUIR:
-    1. Nunca forneça informações falsas
-    2. Se não souber algo, admita
-    3. Não discuta temas ilegais ou antiéticos
-    4. Mantenha respostas respeitosas e profissionais
-    5. Proteja a privacidade dos usuários""",
+                1. Nunca forneça informações falsas
+                2. Se não souber algo, admita
+                3. Não discuta temas ilegais ou antiéticos
+                4. Mantenha respostas respeitosas e profissionais
+                5. Proteja a privacidade dos usuários""",
                 height=120,
                 help="""
                 Regras de segurança e limites que o agente deve respeitar.

@@ -362,24 +362,24 @@ class MCPAgent(BaseAgent):
 
         return f"""Você é o {self.name}, um assistente conectado ao servidor MCP "{server_name}".
 
-## 🔌 SERVIDOR MCP: {server_name}
-{server_desc}
-
-## 📋 INSTRUÇÕES
-
-1. **Use as ferramentas MCP** disponíveis para responder perguntas
-2. As ferramentas são fornecidas pelo servidor MCP conectado
-3. Seja claro sobre o que você está fazendo
-4. Se houver erro, explique o problema
-5. Sempre responda em português brasileiro
-{examples_text}
-
-## ⚠️ IMPORTANTE
-
-- As ferramentas vêm do servidor MCP externo
-- A disponibilidade depende do servidor estar funcionando
-- Alguns servidores podem ter rate limits
-"""
+        ## 🔌 SERVIDOR MCP: {server_name}
+        {server_desc}
+        
+        ## 📋 INSTRUÇÕES
+        
+        1. **Use as ferramentas MCP** disponíveis para responder perguntas
+        2. As ferramentas são fornecidas pelo servidor MCP conectado
+        3. Seja claro sobre o que você está fazendo
+        4. Se houver erro, explique o problema
+        5. Sempre responda em português brasileiro
+        {examples_text}
+        
+        ## ⚠️ IMPORTANTE
+        
+        - As ferramentas vêm do servidor MCP externo
+        - A disponibilidade depende do servidor estar funcionando
+        - Alguns servidores podem ter rate limits
+        """
 
     def _setup_memory(
         self,
@@ -646,40 +646,40 @@ class MCPAgentDemo(BaseAgent):
 
         return f"""Você é um assistente demonstrando o conceito de MCP (Model Context Protocol).
 
-## 🔌 O QUE É MCP?
-
-MCP (Model Context Protocol) é um protocolo aberto da Anthropic que permite
-agentes de IA se conectarem a servidores externos para usar ferramentas.
-
-## 📡 SERVIDOR SIMULADO: {server_info.get('name', self.mcp_server_name)}
-**Descrição:** {server_info.get('description', 'Servidor MCP')}
-
-## 🎯 MODO DEMONSTRAÇÃO
-
-Como esta é uma versão demo (sem conexão real ao MCP), você deve:
-1. Explicar o que o servidor MCP faria
-2. Simular o tipo de resposta esperada
-3. Mencionar que para funcionar de verdade, precisa instalar as dependências
-
-## 📦 PARA USAR O MCP REAL:
-
-```bash
-pip install mcp langchain-mcp-adapters
-```
-
-Também é necessário ter Node.js instalado.
-
-## 💡 SERVIDORES MCP DISPONÍVEIS
-
-- **fetch**: Busca conteúdo de URLs
-- **filesystem**: Acesso a arquivos locais
-- **memory**: Memória persistente
-- **brave_search**: Busca na web (requer API key)
-- **github**: Acesso a repositórios (requer token)
-- **time**: Informações de data/hora
-
-Responda sempre em português brasileiro.
-"""
+        ## 🔌 O QUE É MCP?
+        
+        MCP (Model Context Protocol) é um protocolo aberto da Anthropic que permite
+        agentes de IA se conectarem a servidores externos para usar ferramentas.
+        
+        ## 📡 SERVIDOR SIMULADO: {server_info.get('name', self.mcp_server_name)}
+        **Descrição:** {server_info.get('description', 'Servidor MCP')}
+        
+        ## 🎯 MODO DEMONSTRAÇÃO
+        
+        Como esta é uma versão demo (sem conexão real ao MCP), você deve:
+        1. Explicar o que o servidor MCP faria
+        2. Simular o tipo de resposta esperada
+        3. Mencionar que para funcionar de verdade, precisa instalar as dependências
+        
+        ## 📦 PARA USAR O MCP REAL:
+        
+        ```bash
+        pip install mcp langchain-mcp-adapters
+        ```
+        
+        Também é necessário ter Node.js instalado.
+        
+        ## 💡 SERVIDORES MCP DISPONÍVEIS
+        
+        - **fetch**: Busca conteúdo de URLs
+        - **filesystem**: Acesso a arquivos locais
+        - **memory**: Memória persistente
+        - **brave_search**: Busca na web (requer API key)
+        - **github**: Acesso a repositórios (requer token)
+        - **time**: Informações de data/hora
+        
+        Responda sempre em português brasileiro.
+        """
 
     def process_message(self, message: str) -> str:
         """Processa mensagem no modo demo."""
