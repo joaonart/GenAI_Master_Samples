@@ -54,7 +54,7 @@ load_dotenv()
 # Cada agente pode ter parâmetros específicos além dos comuns
 
 AVAILABLE_AGENTS = {
-    "Simple (OpenAI)": {
+    "🤖 Simple (OpenAI)": {
         "class": SimpleAgent,
         "description": "Agente simples sem tools e RAG (OpenAI)",
         "api_key_env": "OPENAI_API_KEY",
@@ -63,16 +63,16 @@ AVAILABLE_AGENTS = {
         "extra_params": ["presence_penalty", "frequency_penalty"],
         "provider": "openai"
     },
-    "Simple (Gemini)": {
+    "🤖 Simple (Gemini)": {
         "class": SimpleAgent,
         "description": "Agente simples sem tools e RAG (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20", "gemini-1.5-pro"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
         "extra_params": ["top_k"],
         "provider": "google"
     },
-    "Tools (OpenAI)": {
+    "🛠️ Tools (OpenAI)": {
         "class": OpenAIAgent,
         "description": "Agente usando OpenAI GPT-4 com tools",
         "api_key_env": "OPENAI_API_KEY",
@@ -81,12 +81,12 @@ AVAILABLE_AGENTS = {
         # Parâmetros específicos do OpenAI
         "extra_params": ["presence_penalty", "frequency_penalty"]
     },
-    "Tools (Gemini)": {
+    "🛠️ Tools (Gemini)": {
         "class": GeminiAgent,
         "description": "Agente usando Google Gemini com tools",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.5-flash", "gemini-2.0-flash"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
         # Parâmetros específicos do Gemini
         "extra_params": ["top_k"]
     },
@@ -100,83 +100,83 @@ AVAILABLE_AGENTS = {
         "extra_params": ["num_ctx", "repeat_penalty"],
         "is_local": True
     },
-    "💰 Finance (OpenAI)": {
-        "class": FinanceAgent,
-        "description": "Especialista em finanças: ações, crypto e câmbio (OpenAI)",
-        "api_key_env": "OPENAI_API_KEY",
-        "api_key_url": "https://platform.openai.com/api-keys",
-        "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
-        "extra_params": ["presence_penalty", "frequency_penalty"],
-        "provider": "openai",
-        "is_specialist": True
-    },
+    # "💰 Finance (OpenAI)": {
+    #     "class": FinanceAgent,
+    #     "description": "Especialista em finanças: ações, crypto e câmbio (OpenAI)",
+    #     "api_key_env": "OPENAI_API_KEY",
+    #     "api_key_url": "https://platform.openai.com/api-keys",
+    #     "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
+    #     "extra_params": ["presence_penalty", "frequency_penalty"],
+    #     "provider": "openai",
+    #     "is_specialist": True
+    # },
     "💰 Finance (Gemini)": {
         "class": FinanceAgent,
         "description": "Especialista em finanças: ações, crypto e câmbio (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20", "gemini-1.5-pro"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True
     },
-    "📚 Knowledge (OpenAI)": {
-        "class": KnowledgeAgent,
-        "description": "Especialista em conhecimento: Wikipedia e informações enciclopédicas (OpenAI)",
-        "api_key_env": "OPENAI_API_KEY",
-        "api_key_url": "https://platform.openai.com/api-keys",
-        "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
-        "extra_params": ["presence_penalty", "frequency_penalty"],
-        "provider": "openai",
-        "is_specialist": True
-    },
+    # "📚 Knowledge (OpenAI)": {
+    #     "class": KnowledgeAgent,
+    #     "description": "Especialista em conhecimento: Wikipedia e informações enciclopédicas (OpenAI)",
+    #     "api_key_env": "OPENAI_API_KEY",
+    #     "api_key_url": "https://platform.openai.com/api-keys",
+    #     "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
+    #     "extra_params": ["presence_penalty", "frequency_penalty"],
+    #     "provider": "openai",
+    #     "is_specialist": True
+    # },
     "📚 Knowledge (Gemini)": {
         "class": KnowledgeAgent,
         "description": "Especialista em conhecimento: Wikipedia e informações enciclopédicas (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20", "gemini-1.5-pro"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True
     },
-    "🔍 Web Search (OpenAI)": {
-        "class": WebSearchAgent,
-        "description": "Especialista em pesquisa web: busca informações atualizadas na internet (OpenAI)",
-        "api_key_env": "OPENAI_API_KEY",
-        "api_key_url": "https://platform.openai.com/api-keys",
-        "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
-        "extra_params": ["presence_penalty", "frequency_penalty"],
-        "provider": "openai",
-        "is_specialist": True
-    },
+    # "🔍 Web Search (OpenAI)": {
+    #     "class": WebSearchAgent,
+    #     "description": "Especialista em pesquisa web: busca informações atualizadas na internet (OpenAI)",
+    #     "api_key_env": "OPENAI_API_KEY",
+    #     "api_key_url": "https://platform.openai.com/api-keys",
+    #     "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
+    #     "extra_params": ["presence_penalty", "frequency_penalty"],
+    #     "provider": "openai",
+    #     "is_specialist": True
+    # },
     "🔍 Web Search (Gemini)": {
         "class": WebSearchAgent,
         "description": "Especialista em pesquisa web: busca informações atualizadas na internet (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20", "gemini-1.5-pro"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True
     },
-    "🔌 MCP Demo (OpenAI)": {
-        "class": MCPAgentDemo,
-        "description": "Demonstração do Model Context Protocol (MCP) - conecta a servidores externos (OpenAI)",
-        "api_key_env": "OPENAI_API_KEY",
-        "api_key_url": "https://platform.openai.com/api-keys",
-        "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
-        "extra_params": ["presence_penalty", "frequency_penalty"],
-        "provider": "openai",
-        "is_specialist": True,
-        "mcp_server": "fetch"
-    },
+    # "🔌 MCP Demo (OpenAI)": {
+    #     "class": MCPAgentDemo,
+    #     "description": "Demonstração do Model Context Protocol (MCP) - conecta a servidores externos (OpenAI)",
+    #     "api_key_env": "OPENAI_API_KEY",
+    #     "api_key_url": "https://platform.openai.com/api-keys",
+    #     "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
+    #     "extra_params": ["presence_penalty", "frequency_penalty"],
+    #     "provider": "openai",
+    #     "is_specialist": True,
+    #     "mcp_server": "fetch"
+    # },
     "🔌 MCP Demo (Gemini)": {
         "class": MCPAgentDemo,
         "description": "Demonstração do Model Context Protocol (MCP) - conecta a servidores externos (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20", "gemini-1.5-pro"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True,
@@ -186,23 +186,23 @@ AVAILABLE_AGENTS = {
 
 # Adiciona MCPAgent real se disponível
 if MCP_REAL_AVAILABLE and MCPAgent is not None:
-    AVAILABLE_AGENTS["🔌 MCP Fetch (OpenAI)"] = {
-        "class": MCPAgent,
-        "description": "🌐 MCP REAL: Busca e extrai conteúdo de URLs (OpenAI)",
-        "api_key_env": "OPENAI_API_KEY",
-        "api_key_url": "https://platform.openai.com/api-keys",
-        "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
-        "extra_params": ["presence_penalty", "frequency_penalty"],
-        "provider": "openai",
-        "is_specialist": True,
-        "mcp_server": "fetch"
-    }
+    # AVAILABLE_AGENTS["🔌 MCP Fetch (OpenAI)"] = {
+    #     "class": MCPAgent,
+    #     "description": "🌐 MCP REAL: Busca e extrai conteúdo de URLs (OpenAI)",
+    #     "api_key_env": "OPENAI_API_KEY",
+    #     "api_key_url": "https://platform.openai.com/api-keys",
+    #     "models": ["gpt-4o-mini", "gpt-4o", "gpt-4"],
+    #     "extra_params": ["presence_penalty", "frequency_penalty"],
+    #     "provider": "openai",
+    #     "is_specialist": True,
+    #     "mcp_server": "fetch"
+    # }
     AVAILABLE_AGENTS["🔌 MCP Fetch (Gemini)"] = {
         "class": MCPAgent,
         "description": "🌐 MCP REAL: Busca e extrai conteúdo de URLs (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20", "gemini-1.5-pro"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True,
@@ -577,14 +577,11 @@ def display_sidebar():
                     # Monta o label do chat com informações do agente
                     chat_label = chat_data['name']
                     if chat_data.get('agent_name'):
-                        chat_label += f" ({chat_data['agent_name']}"
-                        if chat_data.get('model'):
-                            chat_label += f" - {chat_data['model']}"
-                        chat_label += ")"
+                        chat_label += f" ({chat_data['agent_name']})"
 
                     # Botão para selecionar o chat
                     if st.button(
-                        f"{'▶ ' if is_active else ''}{chat_label}",
+                        f"{'' if is_active else ''}{chat_label}",
                         key=f"select_{chat_id}",
                         type="primary" if is_active else "secondary",
                         use_container_width=True
@@ -644,14 +641,6 @@ def display_sidebar():
 
         agent_config = AVAILABLE_AGENTS[selected_agent]
 
-        # Mostra descrição do agente
-        st.caption(agent_config["description"])
-
-        # -----------------------------------------------------------------
-        # CONFIGURAÇÕES DO MODELO
-        # -----------------------------------------------------------------
-        st.subheader("2. Selecione o Modelo")
-
         # Determina o índice do modelo selecionado
         model_options = agent_config["models"]
         default_model_index = 0
@@ -669,6 +658,14 @@ def display_sidebar():
             key=model_select_key,
             help="Modelos mais capazes geralmente são mais lentos e caros"
         )
+
+        # Mostra descrição do agente
+        st.caption(agent_config["description"])
+
+        # -----------------------------------------------------------------
+        # CONFIGURAÇÕES DO MODELO
+        # -----------------------------------------------------------------
+        st.subheader("2. Configurações do Modelo")
 
         # Parâmetros avançados dentro de um expander
         # Valores padrão (caso o expander não seja aberto)
@@ -808,7 +805,7 @@ def display_sidebar():
         # -----------------------------------------------------------------
         # API KEY (não mostrar para Ollama)
         # -----------------------------------------------------------------
-        st.subheader("3. Configure o Acesso")
+        st.subheader("3. Configurações de Acesso")
 
         # Ollama não precisa de API Key
         is_local_agent = agent_config.get("is_local", False)
