@@ -630,10 +630,15 @@ def display_sidebar():
         if saved_agent_name and saved_agent_name in agent_options:
             default_agent_index = agent_options.index(saved_agent_name)
 
+        # Usa key única para o chat ativo - isso garante que ao trocar de chat,
+        # o selectbox seja recriado com o valor correto
+        agent_select_key = f"agent_select_{st.session_state.active_chat_id}"
+
         selected_agent = st.selectbox(
             "Agente de IA",
             options=agent_options,
             index=default_agent_index,
+            key=agent_select_key,
             help="Escolha qual agente de IA usar"
         )
 
@@ -653,10 +658,15 @@ def display_sidebar():
         if saved_model and saved_model in model_options and saved_agent_name == selected_agent:
             default_model_index = model_options.index(saved_model)
 
+        # Usa key única vinculada ao chat e ao agente - ao mudar de agente,
+        # o selectbox de modelo é recriado com as opções corretas
+        model_select_key = f"model_select_{st.session_state.active_chat_id}_{selected_agent}"
+
         model = st.selectbox(
             "Modelo",
             options=model_options,
             index=default_model_index,
+            key=model_select_key,
             help="Modelos mais capazes geralmente são mais lentos e caros"
         )
 
