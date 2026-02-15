@@ -592,19 +592,21 @@
         }
 
         /* Botões de Ação da Mensagem (Copy, Like, Dislike) */
+        .message.assistant {
+            position: relative;
+        }
+
         .message-actions {
             display: flex;
             gap: 4px;
-            margin-top: 8px;
-            height: 0;
-            overflow: hidden;
+            position: absolute;
+            bottom: -28px;
+            left: 0;
             opacity: 0;
-            transition: opacity 0.2s ease, height 0.2s ease;
+            transition: opacity 0.2s ease;
         }
 
         .message.assistant:hover .message-actions {
-            height: auto;
-            overflow: visible;
             opacity: 1;
         }
 
@@ -846,15 +848,11 @@
         }
 
         [data-theme="chatgpt"] .message.assistant .message-actions {
-            height: 0;
-            overflow: hidden;
             opacity: 0;
-            transition: opacity 0.2s ease, height 0.2s ease;
+            transition: opacity 0.2s ease;
         }
 
         [data-theme="chatgpt"] .message.assistant:hover .message-actions {
-            height: auto;
-            overflow: visible;
             opacity: 1;
         }
 
