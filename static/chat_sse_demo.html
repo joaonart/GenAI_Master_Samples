@@ -925,35 +925,13 @@
         }
 
         [data-theme="chatgpt"] .chat-input button#sendButton {
-            background: #676767;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            min-width: 36px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border: none;
-            transition: background 0.2s;
+            background: transparent;
+            color: #9b9b9b;
         }
 
         [data-theme="chatgpt"] .chat-input button#sendButton:hover:not(:disabled) {
-            background: #8e8e8e;
-            transform: none;
-            box-shadow: none;
-        }
-
-        [data-theme="chatgpt"] .chat-input button#sendButton:disabled {
-            background: #424242;
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        [data-theme="chatgpt"] .chat-input button svg {
-            width: 16px;
-            height: 16px;
+            background: #2f2f2f;
+            color: #ececec;
         }
 
         /* Status bar ChatGPT */
@@ -1231,34 +1209,12 @@
 
         [data-theme="gemini"] .chat-input button#sendButton {
             background: transparent;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            min-width: 36px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: #a8a8a8;
-            transition: background 0.2s, color 0.2s;
         }
 
         [data-theme="gemini"] .chat-input button#sendButton:hover:not(:disabled) {
             background: #2a2a2a;
             color: #e3e3e3;
-            transform: none;
-            box-shadow: none;
-        }
-
-        [data-theme="gemini"] .chat-input button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        [data-theme="gemini"] .chat-input button svg {
-            width: 18px;
-            height: 18px;
         }
 
         /* Status bar Gemini */
@@ -1539,29 +1495,13 @@
         }
 
         [data-theme="default"] .chat-input button#sendButton {
-            background: var(--accent-gradient);
+            background: transparent;
+            color: #a8a8a8;
         }
 
         [data-theme="default"] .chat-input button#sendButton:hover:not(:disabled) {
-            color: #a8a8a8;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        [data-theme="default"] .chat-input button:hover:not(:disabled) {
             background: #3d2d54;
             color: #e3e3e3;
-            transform: none;
-            box-shadow: none;
-        }
-
-        [data-theme="default"] .chat-input button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        [data-theme="default"] .chat-input button svg {
-            width: 18px;
-            height: 18px;
         }
 
         /* Status bar Default */
@@ -1710,14 +1650,14 @@
             gap: 4px;
         }
 
-        .chat-input button {
-            width: 36px;
-            height: 36px;
-            min-width: 36px;
+        .chat-input button#sendButton {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
             border-radius: 50%;
             border: none;
-            background: var(--accent-gradient);
-            color: var(--text-primary);
+            background: transparent;
+            color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
@@ -1726,20 +1666,18 @@
             padding: 0;
         }
 
-        .chat-input button svg {
-            width: 18px;
-            height: 18px;
+        .chat-input button#sendButton:hover:not(:disabled) {
+            background: var(--bg-hover);
+            color: var(--text-primary);
         }
 
-        .chat-input button:hover:not(:disabled) {
-            opacity: 0.85;
-            transform: scale(1.05);
-        }
-
-        .chat-input button:disabled {
+        .chat-input button#sendButton:disabled {
             opacity: 0.4;
             cursor: not-allowed;
-            transform: none;
+        }
+
+        .chat-input button#sendButton i {
+            font-size: 1rem;
         }
 
         /* Animação de loading no botão */
@@ -1768,19 +1706,32 @@
 
         /* Botão de Stop */
         #stopButton {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 50%;
+            border: none;
             background: #ef4444 !important;
             color: white !important;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
             animation: pulseStop 1.5s ease-in-out infinite;
+        }
+
+        #stopButton i {
+            font-size: 0.9rem;
         }
 
         #stopButton:hover {
             background: #dc2626 !important;
-            transform: scale(1.05);
         }
 
         @keyframes pulseStop {
             0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+            50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
         }
 
         /* Botão de Anexar Arquivo */
