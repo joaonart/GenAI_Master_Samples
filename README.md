@@ -365,11 +365,11 @@ Acesse **http://localhost:8000/demo** para usar o chat interativo com:
 
 ### 🎨 Temas Disponíveis
 
-| Tema | Descrição |
-|------|-----------|
+| Tema | Descrição                            |
+|------|--------------------------------------|
 | 🌙 Default | Tema escuro com gradiente roxo/ciano |
-| 💚 ChatGPT | Idêntico ao ChatGPT da OpenAI |
-| 💙 Gemini | Idêntico ao Google Gemini |
+| 💚 ChatGPT | Similar ao ChatGPT da OpenAI         |
+| 💙 Gemini | Similar ao Google Gemini             |
 
 ---
 
