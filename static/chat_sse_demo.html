@@ -1766,6 +1766,23 @@
             opacity: 0.7;
         }
 
+        /* Botão de Stop */
+        #stopButton {
+            background: #ef4444 !important;
+            color: white !important;
+            animation: pulseStop 1.5s ease-in-out infinite;
+        }
+
+        #stopButton:hover {
+            background: #dc2626 !important;
+            transform: scale(1.05);
+        }
+
+        @keyframes pulseStop {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+        }
+
         /* Botão de Anexar Arquivo */
         .chat-input .attach-btn,
         .chat-input .agent-selector-btn {
@@ -2784,6 +2801,9 @@
                             <button id="sendButton" onclick="sendMessage()" title="Enviar mensagem">
                                 <i class="fa-solid fa-arrow-up"></i>
                             </button>
+                            <button id="stopButton" onclick="stopStreaming()" title="Parar resposta" style="display: none;">
+                                <i class="fa-solid fa-stop"></i>
+                            </button>
                         </div>
                     </div>
                     <p class="chat-disclaimer">A IA pode cometer erros. Sempre valide as informações.</p>
@@ -2955,6 +2975,7 @@ while (true) {
         let isStreaming = false;
         let currentTokensOut = 0;
         let attachedFiles = []; // Arquivos anexados pendentes
+        let abortController = null; // Controlador para cancelar streaming
 
         // Mapa de sessionId da API por conversa
         let apiSessions = {};
@@ -2963,6 +2984,7 @@ while (true) {
         const chatMessages = document.getElementById('chatMessages');
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
+        const stopButton = document.getElementById('stopButton');
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
         const tokensIn = document.getElementById('tokensIn');
@@ -3662,6 +3684,28 @@ async function newConversation() {
             statusDot.className = `status-dot ${streaming ? 'streaming' : ''}`;
         }
 
+        // Controle de botões enviar/parar
+        function showStopButton() {
+            sendButton.style.display = 'none';
+            stopButton.style.display = 'flex';
+        }
+
+        function showSendButton() {
+            stopButton.style.display = 'none';
+            sendButton.style.display = 'flex';
+        }
+
+        // Função para parar o streaming
+        function stopStreaming() {
+            if (abortController) {
+                abortController.abort();
+                abortController = null;
+            }
+            isStreaming = false;
+            showSendButton();
+            updateStatus('<i class="fa-solid fa-circle-stop"></i> Interrompido', false);
+        }
+
         async function sendMessage() {
             const message = messageInput.value.trim();
             if (!message || isStreaming) return;
@@ -3737,8 +3781,7 @@ async function newConversation() {
             renderConversationsList();
 
             isStreaming = true;
-            sendButton.disabled = true;
-            sendButton.classList.add('loading');
+            showStopButton();
             currentTokensOut = 0;
             tokensIn.innerHTML = '<i class="fa-solid fa-arrow-up"></i> ...';
             tokensOut.innerHTML = '<i class="fa-solid fa-arrow-down"></i> 0';
@@ -3754,12 +3797,14 @@ async function newConversation() {
             }
 
             isStreaming = false;
-            sendButton.disabled = false;
-            sendButton.classList.remove('loading');
+            showSendButton();
         }
 
         async function sendStreamingMessage(apiUrl, agentId, message, temperature, startTime, sessionId) {
             updateStatus('Conectando...', true);
+
+            // Cria AbortController para poder cancelar o streaming
+            abortController = new AbortController();
 
             const responseBubble = addMessageToDOM('', false, true);
             let responseText = '';
@@ -3778,7 +3823,8 @@ async function newConversation() {
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
+                    body: JSON.stringify({ message: message }),
+                    signal: abortController.signal
                 });
 
                 const reader = response.body.getReader();
@@ -3879,6 +3925,52 @@ async function newConversation() {
                 updateStatus(sessionId ? '<i class="fa-solid fa-brain"></i> Pronto (com memória)' : 'Pronto', false);
 
             } catch (error) {
+                // Verifica se foi um abort (usuário clicou em parar)
+                if (error.name === 'AbortError') {
+                    console.log('⏹️ Streaming interrompido pelo usuário');
+                    // Finaliza a mensagem atual com o que já foi recebido
+                    if (responseText) {
+                        responseBubble.innerHTML = renderMarkdown(responseText);
+                        responseBubble.className = 'bubble';
+                        responseBubble.querySelectorAll('pre code').forEach((block) => {
+                            hljs.highlightElement(block);
+                        });
+
+                        // Adiciona botões de ação
+                        const messageDiv = responseBubble.closest('.message');
+                        if (messageDiv && !messageDiv.querySelector('.message-actions')) {
+                            const actionsDiv = document.createElement('div');
+                            actionsDiv.className = 'message-actions';
+                            actionsDiv.innerHTML = `
+                                <button class="copy-btn" onclick="copyMessageContent(this)" title="Copiar resposta">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                                <button class="like-btn" onclick="toggleLike(this, 'like')" title="Gostei">
+                                    <i class="fa-regular fa-thumbs-up"></i>
+                                </button>
+                                <button class="dislike-btn" onclick="toggleLike(this, 'dislike')" title="Não gostei">
+                                    <i class="fa-regular fa-thumbs-down"></i>
+                                </button>
+                            `;
+                            messageDiv.appendChild(actionsDiv);
+                        }
+
+                        // Salva a resposta parcial na conversa
+                        const conversation = conversations.find(c => c.id === currentConversationId);
+                        if (conversation) {
+                            conversation.messages.push({
+                                role: 'assistant',
+                                content: responseText + '\n\n*[Resposta interrompida]*'
+                            });
+                            saveConversations();
+                        }
+                    } else {
+                        responseBubble.innerHTML = '<i class="fa-solid fa-circle-stop"></i> Resposta interrompida';
+                        responseBubble.className = 'bubble';
+                    }
+                    return;
+                }
+
                 console.error('Erro no streaming:', error);
                 responseBubble.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Erro: ${error.message}`;
                 responseBubble.className = 'bubble';
