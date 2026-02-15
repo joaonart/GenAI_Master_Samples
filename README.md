@@ -371,6 +371,23 @@ Acesse **http://localhost:8000/demo** para usar o chat interativo com:
 | 💚 ChatGPT | Similar ao ChatGPT da OpenAI         |
 | 💙 Gemini | Similar ao Google Gemini             |
 
+### 📸 Screenshots
+
+<p align="center">
+  <img src="assets/default.png" alt="Tema Default" width="400"/>
+  <br><em>🌙 Tema Default</em>
+</p>
+
+<p align="center">
+  <img src="assets/openai.png" alt="Tema ChatGPT" width="400"/>
+  <br><em>💚 Tema ChatGPT (OpenAI)</em>
+</p>
+
+<p align="center">
+  <img src="assets/gemini.png" alt="Tema Gemini" width="400"/>
+  <br><em>💙 Tema Gemini (Google)</em>
+</p>
+
 ---
 
 ## 📚 Conceitos Importantes
