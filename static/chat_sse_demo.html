@@ -777,25 +777,32 @@
         }
 
         [data-theme="chatgpt"] .attached-files {
-            background: #303030;
-            border: 1px solid transparent;
+            background: #2f2f2f;
+            border: 1px solid rgba(255,255,255,0.12);
             border-bottom: none;
+            border-radius: 26px 26px 0 0;
             max-width: 48rem;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        [data-theme="chatgpt"] .chat-input-container:has(.chat-input:focus-within) .attached-files {
+            border-color: rgba(255,255,255,0.22);
+            background: #2a2a2a;
         }
 
         [data-theme="chatgpt"] .attached-file {
             background: #212121;
-            border-color: #424242;
+            border-color: rgba(255,255,255,0.12);
         }
 
         [data-theme="chatgpt"] .chat-input {
-            background: #303030;
+            background: #2f2f2f;
             border-radius: 26px;
-            border: 1px solid transparent;
+            border: 1px solid rgba(255,255,255,0.12);
             padding: 4px 4px 4px 8px;
             gap: 0;
             max-width: 48rem;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, background 0.2s;
         }
 
         [data-theme="chatgpt"] .chat-input-container:has(.attached-files[style*="flex"]) .chat-input {
@@ -804,7 +811,8 @@
         }
 
         [data-theme="chatgpt"] .chat-input:focus-within {
-            border-color: #424242;
+            border-color: rgba(255,255,255,0.22);
+            background: #2a2a2a;
         }
 
         [data-theme="chatgpt"] .chat-input input {
@@ -1082,7 +1090,14 @@
             background: #1e1e1e;
             border: 1px solid rgba(138, 180, 248, 0.08);
             border-bottom: none;
+            border-radius: 28px 28px 0 0;
             max-width: 48rem;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        [data-theme="gemini"] .chat-input-container:has(.chat-input:focus-within) .attached-files {
+            border-color: rgba(138, 180, 248, 0.18);
+            background: #1a1a1a;
         }
 
         [data-theme="gemini"] .attached-file {
@@ -1389,7 +1404,14 @@
             background: #251d33;
             border: 1px solid rgba(179, 136, 255, 0.08);
             border-bottom: none;
+            border-radius: 28px 28px 0 0;
             max-width: 48rem;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        [data-theme="default"] .chat-input-container:has(.chat-input:focus-within) .attached-files {
+            border-color: rgba(179, 136, 255, 0.18);
+            background: #2a1f3a;
         }
 
         [data-theme="default"] .attached-file {
@@ -1670,6 +1692,7 @@
             border: 1px solid var(--border-color);
             border-radius: 28px 28px 0 0;
             border-bottom: none;
+            transition: border-color 0.2s, background 0.2s;
         }
 
         /* Quando há arquivos, ajusta o input para conectar visualmente */
@@ -1677,6 +1700,12 @@
             border-top-left-radius: 0;
             border-top-right-radius: 0;
             border-top: none;
+        }
+
+        /* Efeito de foco na área de arquivos quando o input está focado */
+        .chat-input-container:has(.chat-input:focus-within) .attached-files {
+            border-color: var(--accent-color);
+            background: var(--bg-hover);
         }
 
         .attached-file {
