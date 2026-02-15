@@ -594,14 +594,15 @@
         /* Botões de Ação da Mensagem (Copy, Like, Dislike) */
         .message.assistant {
             position: relative;
+            padding-bottom: 32px;
         }
 
         .message-actions {
             display: flex;
             gap: 4px;
             position: absolute;
-            bottom: -28px;
-            left: 0;
+            bottom: 0;
+            left: 18px;
             opacity: 0;
             transition: opacity 0.2s ease;
         }
@@ -836,6 +837,7 @@
 
         [data-theme="chatgpt"] .message.assistant {
             text-align: left;
+            padding-bottom: 32px;
         }
 
         [data-theme="chatgpt"] .message.assistant .bubble {
@@ -848,6 +850,7 @@
         }
 
         [data-theme="chatgpt"] .message.assistant .message-actions {
+            left: 20px;
             opacity: 0;
             transition: opacity 0.2s ease;
         }
@@ -1155,6 +1158,7 @@
 
         [data-theme="gemini"] .message.assistant {
             text-align: left;
+            padding-bottom: 32px;
         }
 
         [data-theme="gemini"] .message.assistant .bubble {
@@ -1164,6 +1168,10 @@
             max-width: 100%;
             color: #d8d8d8;
             line-height: 1.7;
+        }
+
+        [data-theme="gemini"] .message.assistant .message-actions {
+            left: 20px;
         }
 
         [data-theme="gemini"] .chat-input-container {
@@ -1469,6 +1477,7 @@
 
         [data-theme="default"] .message.assistant {
             text-align: left;
+            padding-bottom: 32px;
         }
 
         [data-theme="default"] .message.assistant .bubble {
@@ -1478,6 +1487,10 @@
             max-width: 100%;
             color: #d8d8d8;
             line-height: 1.7;
+        }
+
+        [data-theme="default"] .message.assistant .message-actions {
+            left: 20px;
         }
 
         [data-theme="default"] .chat-input-container {
