@@ -43,31 +43,106 @@
         }
 
         /* Tema ChatGPT - 2025/2026 Design Atualizado */
-        [data-theme="chatgpt"] {
-            --bg-primary: #212121;
-            --bg-secondary: #212121;
-            --bg-sidebar: #171717;
-            --bg-chat: #212121;
-            --bg-input: #303030;
-            --bg-message-user: #303030;
-            --bg-message-assistant: transparent;
-            --bg-hover: #2f2f2f;
-            --bg-modal: #2f2f2f;
-            --border-color: transparent;
-            --text-primary: #ececec;
-            --text-secondary: #b4b4b4;
-            --text-muted: #9b9b9b;
-            --accent-color: #ececec;
-            --accent-gradient: #676767;
-            --success-color: #19c37d;
-            --warning-color: #f5a623;
-            --error-color: #ef4146;
-            --code-bg: #1e1e1e;
-            --scrollbar-thumb: #424242;
-            --scrollbar-track: transparent;
-            --input-border-color: #424242;
-            --new-chat-bg: transparent;
-            --new-chat-border: #424242;
+       [data-theme="chatgpt"] {
+          --bg-primary: #212121;
+          --bg-secondary: #212121;
+          --bg-sidebar: #171717;
+          --bg-chat: #212121;
+
+          /* input e cards */
+          --bg-input: #2f2f2f;                 /* antes: #303030 */
+          --bg-hover: #2a2a2a;                 /* hover mais sutil */
+          --bg-modal: #2f2f2f;
+
+          /* bordas sutis (ChatGPT tem borda bem discreta) */
+          --border-color: rgba(255,255,255,0.08);
+          --input-border-color: rgba(255,255,255,0.12);
+
+          /* texto */
+          --text-primary: #ececec;
+          --text-secondary: rgba(236,236,236,0.72);
+          --text-muted: rgba(236,236,236,0.55);
+
+          /* “accent” quase neutro (ChatGPT não é neon) */
+          --accent-color: #ececec;
+          --accent-gradient: #676767;
+
+          --success-color: #19c37d;
+          --warning-color: #f5a623;
+          --error-color: #ef4146;
+
+          --code-bg: #1e1e1e;
+          --scrollbar-thumb: rgba(255,255,255,0.18);
+          --scrollbar-track: transparent;
+        }
+
+       [data-theme="chatgpt"] header {
+          background: #212121;
+        }
+
+        [data-theme="chatgpt"] .sidebar {
+          background: #171717;
+        }
+
+        [data-theme="chatgpt"] .new-chat-btn {
+          border-radius: 10px;
+          border: 1px solid rgba(255,255,255,0.12);
+          background: transparent;
+        }
+
+        [data-theme="chatgpt"] .conversation-item {
+          border-radius: 10px;
+        }
+
+        [data-theme="chatgpt"] .conversation-item:hover {
+          background: #212121; /* bem sutil */
+        }
+
+        [data-theme="chatgpt"] .chat-input {
+          background: #2f2f2f;
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 26px;
+        }
+
+        [data-theme="chatgpt"] .chat-input:focus-within {
+          border-color: rgba(255,255,255,0.22);
+        }
+
+        [data-theme="chatgpt"] .message.assistant .bubble {
+          color: #d1d5db;
+          line-height: 1.75;
+        }
+
+        [data-theme="chatgpt"] .bubble h1,
+        [data-theme="chatgpt"] .bubble h2,
+        [data-theme="chatgpt"] .bubble h3,
+        [data-theme="chatgpt"] .bubble h4 {
+          color: #ececec;        /* sem “accent” chamativo */
+          font-weight: 600;
+        }
+
+        [data-theme="chatgpt"] .bubble a {
+          color: #9bd1ff;        /* link azul clarinho (mais ChatGPT) */
+        }
+
+        [data-theme="chatgpt"] .bubble blockquote {
+          border-left-color: rgba(255,255,255,0.22);
+          color: rgba(236,236,236,0.65);
+        }
+
+        [data-theme="chatgpt"] .bubble pre {
+          background: #1e1e1e;
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 12px;
+        }
+
+        [data-theme="chatgpt"] .bubble code {
+          background: #1e1e1e;
+        }
+
+        [data-theme="chatgpt"] .modal {
+            background: #212121;   /* mesma cor do chat */
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
         /* Tema Google Gemini - 2025/2026 Design Atualizado */
@@ -1344,6 +1419,21 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
+
+            /* garante proporção igual entre todos os componentes */
+            grid-auto-rows: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .form-group select,
+        .form-group input {
+            flex: 1;              /* ocupa a mesma altura dentro do card */
+            min-height: 42px;     /* mantém consistência visual */
         }
 
         .form-group {
@@ -2671,7 +2761,7 @@ async function newConversation() {
                 </div>
             `;
 
-            document.getElementById('agentInfoTitle').textContent = `🤖 ${agent.name}`;
+            document.getElementById('agentInfoTitle').textContent = `${agent.name}`;
             document.getElementById('agentInfoContent').innerHTML = content;
             openModal('agentInfoModal');
         }
