@@ -220,22 +220,70 @@
         /* Sidebar - Lista de Conversas */
         .sidebar {
             width: 280px;
+            min-width: 200px;
+            max-width: 480px;
             background: var(--bg-sidebar);
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            transition: width 0.3s ease, margin-left 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+            transition: opacity 0.3s ease, background 0.3s ease;
             overflow: hidden;
+            position: relative;
         }
 
         .sidebar.collapsed {
-            width: 0;
+            width: 0 !important;
+            min-width: 0;
             margin-left: -1px;
             opacity: 0;
         }
 
         .sidebar.collapsed * {
             visibility: hidden;
+        }
+
+        .sidebar.resizing {
+            transition: none;
+            user-select: none;
+        }
+
+        /* Resize Handle */
+        .sidebar-resize-handle {
+            position: absolute;
+            top: 0;
+            right: -4px;
+            width: 8px;
+            height: 100%;
+            cursor: ew-resize;
+            z-index: 100;
+            background: transparent;
+            transition: background 0.2s ease;
+        }
+
+        .sidebar-resize-handle:hover,
+        .sidebar-resize-handle.active {
+            background: var(--accent-color);
+            opacity: 0.5;
+        }
+
+        .sidebar-resize-handle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 40px;
+            background: var(--border-color);
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .sidebar-resize-handle:hover::after,
+        .sidebar-resize-handle.active::after {
+            opacity: 1;
+            background: var(--accent-color);
         }
 
         /* Toggle Button */
@@ -2204,6 +2252,9 @@
                 <button onclick="openModal('configModal')"><i class="fa-solid fa-gear"></i> Config</button>
                 <button onclick="openModal('infoModal')"><i class="fa-solid fa-circle-info"></i> Info</button>
             </div>
+
+            <!-- Resize Handle -->
+            <div class="sidebar-resize-handle" id="sidebarResizeHandle"></div>
         </div>
 
         <!-- Main Content -->
@@ -2475,6 +2526,107 @@ while (true) {
                 document.querySelector('.sidebar').classList.add('collapsed');
                 document.getElementById('sidebarToggle').classList.add('collapsed');
             }
+
+            // Carrega largura salva
+            const savedWidth = localStorage.getItem('genai_sidebar_width');
+            if (savedWidth) {
+                document.querySelector('.sidebar').style.width = savedWidth + 'px';
+            }
+        }
+
+        // Sidebar Resize
+        function initSidebarResize() {
+            const sidebar = document.querySelector('.sidebar');
+            const resizeHandle = document.getElementById('sidebarResizeHandle');
+
+            if (!resizeHandle) return;
+
+            let isResizing = false;
+            let startX = 0;
+            let startWidth = 0;
+
+            const minWidth = 200;
+            const maxWidth = 480;
+
+            resizeHandle.addEventListener('mousedown', (e) => {
+                if (sidebar.classList.contains('collapsed')) return;
+
+                isResizing = true;
+                startX = e.clientX;
+                startWidth = sidebar.offsetWidth;
+
+                sidebar.classList.add('resizing');
+                resizeHandle.classList.add('active');
+                document.body.style.cursor = 'ew-resize';
+                document.body.style.userSelect = 'none';
+
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+
+                const deltaX = e.clientX - startX;
+                let newWidth = startWidth + deltaX;
+
+                // Aplica limites
+                newWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
+
+                sidebar.style.width = newWidth + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (!isResizing) return;
+
+                isResizing = false;
+                sidebar.classList.remove('resizing');
+                resizeHandle.classList.remove('active');
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+
+                // Salva largura no localStorage
+                localStorage.setItem('genai_sidebar_width', sidebar.offsetWidth);
+            });
+
+            // Suporte a touch para dispositivos móveis
+            resizeHandle.addEventListener('touchstart', (e) => {
+                if (sidebar.classList.contains('collapsed')) return;
+
+                isResizing = true;
+                startX = e.touches[0].clientX;
+                startWidth = sidebar.offsetWidth;
+
+                sidebar.classList.add('resizing');
+                resizeHandle.classList.add('active');
+
+                e.preventDefault();
+            }, { passive: false });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!isResizing) return;
+
+                const deltaX = e.touches[0].clientX - startX;
+                let newWidth = startWidth + deltaX;
+
+                newWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
+                sidebar.style.width = newWidth + 'px';
+            }, { passive: false });
+
+            document.addEventListener('touchend', () => {
+                if (!isResizing) return;
+
+                isResizing = false;
+                sidebar.classList.remove('resizing');
+                resizeHandle.classList.remove('active');
+
+                localStorage.setItem('genai_sidebar_width', sidebar.offsetWidth);
+            });
+
+            // Double-click para resetar largura padrão
+            resizeHandle.addEventListener('dblclick', () => {
+                sidebar.style.width = '280px';
+                localStorage.setItem('genai_sidebar_width', 280);
+            });
         }
 
         // Modal functions
@@ -3174,6 +3326,7 @@ async function newConversation() {
             loadSidebarState();
             loadTheme();
             initTooltips();
+            initSidebarResize();
 
             messageInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter' && !isStreaming) sendMessage();
