@@ -1776,8 +1776,8 @@
             </div>
 
             <div class="sidebar-footer">
-                <button onclick="openModal('configModal')">⚙️ Config</button>
-                <button onclick="openModal('infoModal')">ℹ️ Info</button>
+                <button onclick="openModal('configModal')">Config</button>
+                <button onclick="openModal('infoModal')">Info</button>
             </div>
         </div>
 
@@ -1788,7 +1788,7 @@
                     <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Mostrar/Ocultar conversas">
                         <span class="icon">◀</span>
                     </button>
-                    <h1>🤖 GenAI Chat</h1>
+                    <h1>GenAI Chat</h1>
                 </div>
                 <span class="agent-badge" id="currentAgentBadge" onclick="showAgentInfo()" title="Clique para ver detalhes do agente">⚪ Simple (OpenAI)</span>
             </header>
@@ -1796,7 +1796,7 @@
             <div class="chat-container">
                 <div class="chat-messages" id="chatMessages">
                     <div class="empty-state" id="emptyState">
-                        <div class="icon">💬</div>
+                        <div class="icon">✨</div>
                         <h3>Inicie uma conversa</h3>
                         <p>Escolha um agente nas configurações e faça uma pergunta!</p>
                     </div>
@@ -1832,7 +1832,7 @@
     <div class="modal-overlay" id="configModal">
         <div class="modal">
             <div class="modal-header">
-                <h3>⚙️ Configurações</h3>
+                <h3>Configurações</h3>
                 <button class="modal-close" onclick="closeModal('configModal')">×</button>
             </div>
             <div class="modal-body">
@@ -1844,8 +1844,8 @@
                     <div class="form-group">
                         <label>Agente</label>
                         <select id="agentSelect" onchange="updateAgentBadge()">
-                            <option value="simple-openai">⚪ Simple (OpenAI)</option>
-                            <option value="openai">🔵 OpenAI Agent</option>
+                            <option value="simple-openai">Simple (OpenAI)</option>
+                            <option value="openai">OpenAI Agent</option>
                             <option value="finance-openai">💰 Finance (OpenAI)</option>
                             <option value="knowledge-openai">📚 Knowledge (OpenAI)</option>
                             <option value="websearch-openai">🔍 Web Search (OpenAI)</option>
@@ -1858,15 +1858,15 @@
                     <div class="form-group">
                         <label>Modo</label>
                         <select id="streamMode">
-                            <option value="stream">🚀 Streaming (SSE)</option>
-                            <option value="normal">📄 Normal (JSON)</option>
+                            <option value="stream">Streaming (SSE)</option>
+                            <option value="normal">Normal (JSON)</option>
                         </select>
                     </div>
                 </div>
 
                 <!-- Seletor de Tema -->
                 <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
-                    <label style="display: block; margin-bottom: 10px; color: var(--text-secondary);">🎨 Tema</label>
+                    <label style="display: block; margin-bottom: 10px; color: var(--text-secondary);">Tema</label>
                     <div class="theme-selector">
                         <button class="theme-btn active" data-theme="default" onclick="setTheme('default')">
                             <div class="theme-preview"></div>
@@ -1890,16 +1890,16 @@
     <div class="modal-overlay" id="infoModal">
         <div class="modal">
             <div class="modal-header">
-                <h3>ℹ️ Como Funciona o SSE</h3>
+                <h3>Como Funciona o SSE</h3>
                 <button class="modal-close" onclick="closeModal('infoModal')">×</button>
             </div>
             <div class="modal-body">
                 <div class="info-content">
-                    <h4>🚀 O que é SSE?</h4>
+                    <h4>O que é SSE?</h4>
                     <p>Server-Sent Events (SSE) permite que o servidor envie dados em tempo real para o cliente.
                     A resposta é enviada token por token, criando o efeito de "digitação" do ChatGPT.</p>
 
-                    <h4>📡 Formato dos Eventos</h4>
+                    <h4>Formato dos Eventos</h4>
                     <div class="code-block">
 data: {"type": "start", "session_id": "..."}
 data: {"type": "token", "content": "Olá"}
@@ -1909,7 +1909,7 @@ data: {"type": "end", "processing_time_ms": 1234}
 data: [DONE]
                     </div>
 
-                    <h4>💻 Exemplo JavaScript</h4>
+                    <h4>Exemplo JavaScript</h4>
                     <div class="code-block">
 const response = await fetch('/chat/quick/simple-openai/stream', {
     method: 'POST',
@@ -1929,7 +1929,7 @@ while (true) {
 }
                     </div>
 
-                    <h4>🤖 Agentes Disponíveis</h4>
+                    <h4>Agentes Disponíveis</h4>
                     <p>• <strong>Simple</strong> - Chat básico sem ferramentas</p>
                     <p>• <strong>OpenAI/Gemini</strong> - Com ferramentas (calculadora, busca, etc)</p>
                     <p>• <strong>Finance</strong> - Especialista em ações, crypto e câmbio</p>
@@ -1944,7 +1944,7 @@ while (true) {
     <div class="modal-overlay" id="agentInfoModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 id="agentInfoTitle">🤖 Informações do Agente</h3>
+                <h3 id="agentInfoTitle">Informações do Agente</h3>
                 <button class="modal-close" onclick="closeModal('agentInfoModal')">×</button>
             </div>
             <div class="modal-body">
@@ -2248,7 +2248,7 @@ async function newConversation() {
             if (!currentConversationId) {
                 chatMessages.innerHTML = `
                     <div class="empty-state">
-                        <div class="icon">💬</div>
+                        <div class="icon">✨</div>
                         <h3>Inicie uma conversa</h3>
                         <p>Clique em "Nova Conversa" para começar!</p>
                     </div>
@@ -2492,7 +2492,7 @@ async function newConversation() {
                 saveConversations();
                 renderConversationsList();
 
-                updateStatus(sessionId ? '✅ Pronto (com memória)' : 'Pronto', false);
+                updateStatus(sessionId ? '🧠 Pronto (com memória)' : 'Pronto', false);
 
             } catch (error) {
                 console.error('Erro no streaming:', error);
@@ -2551,7 +2551,7 @@ async function newConversation() {
                 tokensIn.textContent = `↑ ${conversation.totalTokensIn}`;
                 tokensOut.textContent = `↓ ${conversation.totalTokensOut}`;
                 responseTime.textContent = `${elapsed}ms`;
-                updateStatus(sessionId ? '✅ Pronto (com memória)' : 'Pronto', false);
+                updateStatus(sessionId ? '🧠 Pronto (com memória)' : 'Pronto', false);
 
             } catch (error) {
                 console.error('Erro:', error);
@@ -2652,7 +2652,7 @@ async function newConversation() {
 
                 ${tools.length > 0 ? `
                 <div class="agent-info-section">
-                    <h5>🛠️ Ferramentas Disponíveis</h5>
+                    <h5>Ferramentas Disponíveis</h5>
                     <div class="tools-list">
                         ${tools.map(tool => `<span class="tool-tag">${tool}</span>`).join('')}
                     </div>
@@ -2660,7 +2660,7 @@ async function newConversation() {
                 ` : ''}
 
                 <div class="agent-info-section">
-                    <h5>🤖 Modelos Suportados</h5>
+                    <h5>Modelos Suportados</h5>
                     <div class="models-list">
                         ${agent.models.map(model => `
                             <span class="model-tag ${model === agent.default_model ? 'default' : ''}">
