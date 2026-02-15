@@ -3435,6 +3435,9 @@ async function newConversation() {
                 tokensIn.innerHTML = `<i class="fa-solid fa-arrow-up"></i> ${conversation.totalTokensIn || 0}`;
                 tokensOut.innerHTML = `<i class="fa-solid fa-arrow-down"></i> ${conversation.totalTokensOut || 0}`;
             }
+
+            // Foca no campo de input
+            messageInput.focus();
         }
 
         function deleteConversation(id, event) {
