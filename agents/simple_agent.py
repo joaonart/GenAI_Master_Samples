@@ -57,7 +57,7 @@ class SimpleAgent(BaseAgent):
     # Modelos disponíveis por provider
     AVAILABLE_MODELS = {
         "openai": ["gpt-4", "gpt-4o", "gpt-4o-mini"],
-        "google": ["gemini-2.5-flash-preview-05-20", "gemini-2.0-flash", "gemini-1.5-pro"]
+        "google": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3-flash-preview"]
     }
 
     def __init__(

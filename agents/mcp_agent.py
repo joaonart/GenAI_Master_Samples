@@ -166,7 +166,7 @@ class MCPAgent(BaseAgent):
 
     AVAILABLE_MODELS = {
         "openai": ["gpt-4o", "gpt-4o-mini", "gpt-4"],
-        "google": ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20", "gemini-1.5-pro"]
+        "google": ["gemini-2.0-flash", "gemini-2.5-flash-preview", "gemini-3-flash-preview"]
     }
 
     def __init__(
@@ -752,62 +752,3 @@ def get_mcp_server_info(server_name: str) -> Optional[Dict]:
 def list_mcp_servers() -> List[str]:
     """Lista os servidores MCP disponíveis."""
     return list(MCP_SERVERS.keys())
-
-
-# =============================================================================
-# EXEMPLO DE USO
-# =============================================================================
-
-if __name__ == "__main__":
-    print("=" * 60)
-    print("🔌 MCP AGENT - Model Context Protocol")
-    print("=" * 60)
-
-    # Verifica requisitos
-    print("\n📋 Verificando requisitos...")
-    status = check_mcp_requirements()
-
-    print(f"  • Biblioteca MCP: {'✅' if status['mcp_library'] else '❌'}")
-    print(f"  • Node.js: {'✅' if status['node_installed'] else '❌'}")
-    print(f"  • npx: {'✅' if status['npx_installed'] else '❌'}")
-
-    if not status["mcp_library"]:
-        print(f"\n⚠️ Erro MCP: {status['mcp_error']}")
-        print("\nInstale com: pip install mcp langchain-mcp-adapters")
-
-    if not status["node_installed"]:
-        print("\n⚠️ Node.js não encontrado!")
-        print("Instale em: https://nodejs.org/")
-
-    print("\n📡 Servidores MCP disponíveis:")
-    for name, info in MCP_SERVERS.items():
-        env_required = info.get("env_required", [])
-        env_str = f" (requer: {', '.join(env_required)})" if env_required else ""
-        print(f"  • {name}: {info['description']}{env_str}")
-
-    # Testa se pode criar o agente
-    if status["all_ready"] and os.getenv("OPENAI_API_KEY"):
-        print("\n" + "-" * 60)
-        print("🧪 Testando MCPAgent com servidor 'fetch'...")
-
-        try:
-            agent = MCPAgent(
-                provider="openai",
-                mcp_server_name="fetch"
-            )
-            print(f"✅ Agente criado: {agent.name}")
-            print(f"📡 Servidor: {agent.mcp_server_name}")
-
-            # Teste real
-            print("\n🔍 Testando busca de URL...")
-            response = agent.process_message(
-                "Busque informações da página https://www.python.org e me diga o que é Python"
-            )
-            print(response[:500] + "..." if len(response) > 500 else response)
-
-        except Exception as e:
-            print(f"❌ Erro: {e}")
-    else:
-        print("\n⚠️ Não é possível testar o MCPAgent completo.")
-        print("Verifique os requisitos acima.")
-

@@ -90,7 +90,7 @@ class KnowledgeAgent(BaseAgent):
     # Modelos disponíveis por provider
     AVAILABLE_MODELS = {
         "openai": ["gpt-4o", "gpt-4o-mini", "gpt-4"],
-        "google": ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20", "gemini-1.5-pro"]
+        "google": ["gemini-2.0-flash", "gemini-2.5-flash-preview", "gemini-3-flash-preview"]
     }
 
     def __init__(
@@ -514,41 +514,3 @@ class KnowledgeAgent(BaseAgent):
     def get_available_models(cls, provider: str) -> List[str]:
         """Retorna os modelos disponíveis para um provider."""
         return cls.AVAILABLE_MODELS.get(provider.lower(), [])
-
-
-# =============================================================================
-# EXEMPLO DE USO
-# =============================================================================
-
-if __name__ == "__main__":
-    print("=" * 60)
-    print("📚 TESTE DO KNOWLEDGE AGENT")
-    print("=" * 60)
-
-    # Verifica API key
-    openai_key = os.getenv("OPENAI_API_KEY")
-
-    if not openai_key:
-        print("❌ OPENAI_API_KEY não configurada")
-    else:
-        print("✅ OPENAI_API_KEY configurada")
-
-        print("\n" + "-" * 60)
-        print("Criando Knowledge Agent...")
-
-        agent = KnowledgeAgent(
-            provider="openai",
-            model="gpt-4o-mini",
-            temperature=0.3,
-            default_language="pt"
-        )
-
-        print(f"✅ Agente criado: {agent.name}")
-        print(f"📋 Tools disponíveis: {agent.list_tools()}")
-
-        # Teste
-        print("\n" + "-" * 60)
-        print("📝 Teste: Perguntando sobre Albert Einstein...")
-        response = agent.process_message("Quem foi Albert Einstein?")
-        print(response)
-

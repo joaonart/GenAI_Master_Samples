@@ -54,7 +54,7 @@ class GeminiAgent(BaseAgent):
         self,
         name: str = "Gemini Assistant",
         description: str = "Assistente IA powered by Google Gemini",
-        model: str = "gemini-1.5-pro",
+        model: str = "gemini-3-flash-preview",
         temperature: float = 0.7,
         max_tokens: Optional[int] = None,
         top_p: float = 1.0,

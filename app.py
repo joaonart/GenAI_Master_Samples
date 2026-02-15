@@ -68,7 +68,7 @@ AVAILABLE_AGENTS = {
         "description": "Agente simples sem tools e RAG (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3-flash-preview"],
         "extra_params": ["top_k"],
         "provider": "google"
     },
@@ -86,7 +86,7 @@ AVAILABLE_AGENTS = {
         "description": "Agente usando Google Gemini com tools",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3-flash-preview"],
         # Parâmetros específicos do Gemini
         "extra_params": ["top_k"]
     },
@@ -115,7 +115,7 @@ AVAILABLE_AGENTS = {
         "description": "Especialista em finanças: ações, crypto e câmbio (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3-flash-preview"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True
@@ -135,7 +135,7 @@ AVAILABLE_AGENTS = {
         "description": "Especialista em conhecimento: Wikipedia e informações enciclopédicas (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3-flash-preview"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True
@@ -155,7 +155,7 @@ AVAILABLE_AGENTS = {
         "description": "Especialista em pesquisa web: busca informações atualizadas na internet (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3-flash-preview"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True
@@ -176,7 +176,7 @@ AVAILABLE_AGENTS = {
         "description": "Demonstração do Model Context Protocol (MCP) - conecta a servidores externos (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3-flash-preview"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True,
@@ -202,7 +202,7 @@ if MCP_REAL_AVAILABLE and MCPAgent is not None:
         "description": "🌐 MCP REAL: Busca e extrai conteúdo de URLs (Gemini)",
         "api_key_env": "GOOGLE_API_KEY",
         "api_key_url": "https://makersuite.google.com/app/apikey",
-        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3.0-flash"],
+        "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3-flash-preview"],
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True,
