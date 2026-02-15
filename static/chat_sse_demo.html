@@ -776,6 +776,18 @@
             padding: 0 20px 24px;
         }
 
+        [data-theme="chatgpt"] .attached-files {
+            background: #303030;
+            border: 1px solid transparent;
+            border-bottom: none;
+            max-width: 48rem;
+        }
+
+        [data-theme="chatgpt"] .attached-file {
+            background: #212121;
+            border-color: #424242;
+        }
+
         [data-theme="chatgpt"] .chat-input {
             background: #303030;
             border-radius: 26px;
@@ -784,6 +796,11 @@
             gap: 0;
             max-width: 48rem;
             transition: border-color 0.2s;
+        }
+
+        [data-theme="chatgpt"] .chat-input-container:has(.attached-files[style*="flex"]) .chat-input {
+            border-radius: 0 0 26px 26px;
+            border-top: none;
         }
 
         [data-theme="chatgpt"] .chat-input:focus-within {
@@ -1061,6 +1078,18 @@
             padding: 0 20px 24px;
         }
 
+        [data-theme="gemini"] .attached-files {
+            background: #1e1e1e;
+            border: 1px solid rgba(138, 180, 248, 0.08);
+            border-bottom: none;
+            max-width: 48rem;
+        }
+
+        [data-theme="gemini"] .attached-file {
+            background: #0f0f0f;
+            border-color: rgba(138, 180, 248, 0.15);
+        }
+
         [data-theme="gemini"] .chat-input {
             background: #1e1e1e;
             border-radius: 28px;
@@ -1069,6 +1098,11 @@
             gap: 0;
             max-width: 48rem;
             transition: border-color 0.2s, background 0.2s;
+        }
+
+        [data-theme="gemini"] .chat-input-container:has(.attached-files[style*="flex"]) .chat-input {
+            border-radius: 0 0 28px 28px;
+            border-top: none;
         }
 
         [data-theme="gemini"] .chat-input:focus-within {
@@ -1351,6 +1385,18 @@
             padding: 0 20px 24px;
         }
 
+        [data-theme="default"] .attached-files {
+            background: #251d33;
+            border: 1px solid rgba(179, 136, 255, 0.08);
+            border-bottom: none;
+            max-width: 48rem;
+        }
+
+        [data-theme="default"] .attached-file {
+            background: #1a1525;
+            border-color: rgba(179, 136, 255, 0.15);
+        }
+
         [data-theme="default"] .chat-input {
             background: #251d33;
             border-radius: 28px;
@@ -1359,6 +1405,11 @@
             gap: 0;
             max-width: 48rem;
             transition: border-color 0.2s, background 0.2s;
+        }
+
+        [data-theme="default"] .chat-input-container:has(.attached-files[style*="flex"]) .chat-input {
+            border-radius: 0 0 28px 28px;
+            border-top: none;
         }
 
         [data-theme="default"] .chat-input:focus-within {
@@ -1613,8 +1664,19 @@
             flex-wrap: wrap;
             gap: 8px;
             max-width: 800px;
-            margin: 10px auto 0;
-            padding: 0;
+            margin: 0 auto;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 28px 28px 0 0;
+            border-bottom: none;
+        }
+
+        /* Quando há arquivos, ajusta o input para conectar visualmente */
+        .chat-input-container:has(.attached-files[style*="flex"]) .chat-input {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-top: none;
         }
 
         .attached-file {
@@ -2411,6 +2473,9 @@
                 </div>
 
                 <div class="chat-input-container">
+                    <div class="attached-files" id="attachedFiles" style="display: none;">
+                        <!-- Arquivos anexados aparecerão aqui -->
+                    </div>
                     <div class="chat-input">
                         <button class="attach-btn" id="attachButton" onclick="document.getElementById('fileInput').click()" title="Anexar arquivo">
                             <i class="fa-solid fa-paperclip"></i>
@@ -2420,9 +2485,6 @@
                         <button id="sendButton" onclick="sendMessage()" title="Enviar mensagem">
                             <i class="fa-solid fa-arrow-up"></i>
                         </button>
-                    </div>
-                    <div class="attached-files" id="attachedFiles" style="display: none;">
-                        <!-- Arquivos anexados aparecerão aqui -->
                     </div>
                 </div>
             </div>
