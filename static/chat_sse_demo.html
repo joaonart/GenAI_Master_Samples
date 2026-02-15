@@ -591,6 +591,63 @@
             /* Sem borda, apenas o cursor de digitação */
         }
 
+        /* Botões de Ação da Mensagem (Copy, Like, Dislike) */
+        .message-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .message.assistant:hover .message-actions {
+            opacity: 1;
+        }
+
+        .message-actions button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .message-actions button:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .message-actions button.active {
+            color: var(--accent-color);
+        }
+
+        .message-actions button.copied {
+            color: var(--success-color);
+        }
+
+        .message-actions button i {
+            font-size: 0.9rem;
+        }
+
+        /* Estilos específicos por tema para botões de ação */
+        [data-theme="default"] .message-actions button:hover {
+            background: #3d2d54;
+        }
+
+        [data-theme="chatgpt"] .message-actions button:hover {
+            background: #2f2f2f;
+        }
+
+        [data-theme="gemini"] .message-actions button:hover {
+            background: #2a2a2a;
+        }
+
         /* Indicador de digitação (três pontos animados) */
         .typing-indicator {
             display: inline-flex;
@@ -3226,7 +3283,7 @@ async function newConversation() {
             bubbleDiv.className = `bubble ${isStreamingMsg ? 'streaming' : ''}`;
 
             if (isUser) {
-                bubbleDiv.textContent = content;
+                bubbleDiv.innerHTML = content;
             } else if (isStreamingMsg && !content) {
                 // Mostra indicador de digitação quando começar o streaming
                 bubbleDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
@@ -3240,6 +3297,25 @@ async function newConversation() {
             }
 
             messageDiv.appendChild(bubbleDiv);
+
+            // Adiciona botões de ação para mensagens do assistente (não streaming)
+            if (!isUser && !isStreamingMsg) {
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'message-actions';
+                actionsDiv.innerHTML = `
+                    <button class="copy-btn" onclick="copyMessageContent(this)" title="Copiar resposta">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
+                    <button class="like-btn" onclick="toggleLike(this, 'like')" title="Gostei">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                    </button>
+                    <button class="dislike-btn" onclick="toggleLike(this, 'dislike')" title="Não gostei">
+                        <i class="fa-regular fa-thumbs-down"></i>
+                    </button>
+                `;
+                messageDiv.appendChild(actionsDiv);
+            }
+
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
@@ -3250,6 +3326,63 @@ async function newConversation() {
             }
 
             return bubbleDiv;
+        }
+
+        // Funções de ação das mensagens (Copy, Like, Dislike)
+
+        function copyMessageContent(button) {
+            const messageDiv = button.closest('.message');
+            const bubbleDiv = messageDiv.querySelector('.bubble');
+
+            // Pega o texto sem formatação HTML
+            const textContent = bubbleDiv.innerText || bubbleDiv.textContent;
+
+            navigator.clipboard.writeText(textContent).then(() => {
+                // Feedback visual
+                const icon = button.querySelector('i');
+                icon.className = 'fa-solid fa-check';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    icon.className = 'fa-regular fa-copy';
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Erro ao copiar:', err);
+            });
+        }
+
+        function toggleLike(button, type) {
+            const messageDiv = button.closest('.message');
+            const actionsDiv = messageDiv.querySelector('.message-actions');
+            const likeBtn = actionsDiv.querySelector('.like-btn');
+            const dislikeBtn = actionsDiv.querySelector('.dislike-btn');
+
+            if (type === 'like') {
+                if (likeBtn.classList.contains('active')) {
+                    // Remove like
+                    likeBtn.classList.remove('active');
+                    likeBtn.querySelector('i').className = 'fa-regular fa-thumbs-up';
+                } else {
+                    // Adiciona like e remove dislike se existir
+                    likeBtn.classList.add('active');
+                    likeBtn.querySelector('i').className = 'fa-solid fa-thumbs-up';
+                    dislikeBtn.classList.remove('active');
+                    dislikeBtn.querySelector('i').className = 'fa-regular fa-thumbs-down';
+                }
+            } else {
+                if (dislikeBtn.classList.contains('active')) {
+                    // Remove dislike
+                    dislikeBtn.classList.remove('active');
+                    dislikeBtn.querySelector('i').className = 'fa-regular fa-thumbs-down';
+                } else {
+                    // Adiciona dislike e remove like se existir
+                    dislikeBtn.classList.add('active');
+                    dislikeBtn.querySelector('i').className = 'fa-solid fa-thumbs-down';
+                    likeBtn.classList.remove('active');
+                    likeBtn.querySelector('i').className = 'fa-regular fa-thumbs-up';
+                }
+            }
         }
 
         function updateStatus(text, streaming = false) {
@@ -3430,6 +3563,25 @@ async function newConversation() {
                 responseBubble.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightElement(block);
                 });
+
+                // Adiciona botões de ação após o streaming
+                const messageDiv = responseBubble.closest('.message');
+                if (messageDiv && !messageDiv.querySelector('.message-actions')) {
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'message-actions';
+                    actionsDiv.innerHTML = `
+                        <button class="copy-btn" onclick="copyMessageContent(this)" title="Copiar resposta">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                        <button class="like-btn" onclick="toggleLike(this, 'like')" title="Gostei">
+                            <i class="fa-regular fa-thumbs-up"></i>
+                        </button>
+                        <button class="dislike-btn" onclick="toggleLike(this, 'dislike')" title="Não gostei">
+                            <i class="fa-regular fa-thumbs-down"></i>
+                        </button>
+                    `;
+                    messageDiv.appendChild(actionsDiv);
+                }
 
                 // Salva resposta na conversa com tokens
                 const conversation = conversations.find(c => c.id === currentConversationId);
