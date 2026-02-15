@@ -3359,10 +3359,24 @@ while (true) {
             });
 
             renderConversationsList();
+
+            // Restaura a conversa selecionada
+            const savedCurrentId = localStorage.getItem('genai_current_conversation');
+            if (savedCurrentId && conversations.find(c => c.id === savedCurrentId)) {
+                selectConversation(savedCurrentId);
+            }
         }
 
         function saveConversations() {
             localStorage.setItem('genai_conversations', JSON.stringify(conversations));
+        }
+
+        function saveCurrentConversation() {
+            if (currentConversationId) {
+                localStorage.setItem('genai_current_conversation', currentConversationId);
+            } else {
+                localStorage.removeItem('genai_current_conversation');
+            }
         }
 
 async function newConversation() {
@@ -3411,6 +3425,7 @@ async function newConversation() {
 
         function selectConversation(id) {
             currentConversationId = id;
+            saveCurrentConversation();
             renderConversationsList();
             renderCurrentConversation();
 
@@ -3429,6 +3444,7 @@ async function newConversation() {
 
             if (currentConversationId === id) {
                 currentConversationId = conversations.length > 0 ? conversations[0].id : null;
+                saveCurrentConversation();
                 renderCurrentConversation();
             }
             renderConversationsList();
