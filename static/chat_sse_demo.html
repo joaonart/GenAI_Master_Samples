@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GenAI Chat - SSE Demo</title>
+    <!-- Font Awesome para ícones modernos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Marked.js para renderização de Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Highlight.js para syntax highlighting de código -->
@@ -2188,9 +2190,9 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <h2>💬 Conversas</h2>
+                <h2><i class="fa-regular fa-comments"></i> Conversas</h2>
                 <button class="new-chat-btn" onclick="newConversation()">
-                    <span>➕</span> Nova Conversa
+                    <i class="fa-solid fa-plus"></i> Nova Conversa
                 </button>
             </div>
 
@@ -2199,8 +2201,8 @@
             </div>
 
             <div class="sidebar-footer">
-                <button onclick="openModal('configModal')">Config</button>
-                <button onclick="openModal('infoModal')">Info</button>
+                <button onclick="openModal('configModal')"><i class="fa-solid fa-gear"></i> Config</button>
+                <button onclick="openModal('infoModal')"><i class="fa-solid fa-circle-info"></i> Info</button>
             </div>
         </div>
 
@@ -2209,17 +2211,17 @@
             <header>
                 <div class="header-left">
                     <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Mostrar/Ocultar conversas">
-                        <span class="icon">◀</span>
+                        <span class="icon"><i class="fa-solid fa-chevron-left"></i></span>
                     </button>
                     <h1>GenAI Chat</h1>
                 </div>
-                <span class="agent-badge" id="currentAgentBadge" onclick="showAgentInfo()" title="Clique para ver detalhes do agente">⚪ Simple (OpenAI)</span>
+                <span class="agent-badge" id="currentAgentBadge" onclick="showAgentInfo()" title="Clique para ver detalhes do agente"><i class="fa-regular fa-circle"></i> Simple (OpenAI)</span>
             </header>
 
             <div class="chat-container">
                 <div class="chat-messages" id="chatMessages">
                     <div class="empty-state" id="emptyState">
-                        <div class="icon">✨</div>
+                        <div class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                         <h3>Inicie uma conversa</h3>
                         <p>Escolha um agente nas configurações e faça uma pergunta!</p>
                     </div>
@@ -2231,9 +2233,9 @@
                         <span id="statusText">Pronto</span>
                     </div>
                     <div class="stats">
-                        <span id="tokensIn" data-tooltip="Total de tokens de entrada (sua mensagem + contexto)">↑ 0</span>
-                        <span id="tokensOut" data-tooltip="Total de tokens de saída (respostas da IA)">↓ 0</span>
-                        <span id="responseTime" data-tooltip="Tempo da última resposta">0ms</span>
+                        <span id="tokensIn" data-tooltip="Total de tokens de entrada (sua mensagem + contexto)"><i class="fa-solid fa-arrow-up"></i> 0</span>
+                        <span id="tokensOut" data-tooltip="Total de tokens de saída (respostas da IA)"><i class="fa-solid fa-arrow-down"></i> 0</span>
+                        <span id="responseTime" data-tooltip="Tempo da última resposta"><i class="fa-regular fa-clock"></i> 0ms</span>
                     </div>
                 </div>
 
@@ -2241,9 +2243,7 @@
                     <div class="chat-input">
                         <input type="text" id="messageInput" placeholder="Digite sua mensagem..." autocomplete="off">
                         <button id="sendButton" onclick="sendMessage()" title="Enviar mensagem">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                            <i class="fa-solid fa-arrow-up"></i>
                         </button>
                     </div>
                 </div>
@@ -2255,8 +2255,8 @@
     <div class="modal-overlay" id="configModal">
         <div class="modal">
             <div class="modal-header">
-                <h3>Configurações</h3>
-                <button class="modal-close" onclick="closeModal('configModal')">×</button>
+                <h3><i class="fa-solid fa-gear"></i> Configurações</h3>
+                <button class="modal-close" onclick="closeModal('configModal')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <div class="config-grid">
@@ -2269,9 +2269,9 @@
                         <select id="agentSelect" onchange="updateAgentBadge()">
                             <option value="simple-openai">Simple (OpenAI)</option>
                             <option value="openai">OpenAI Agent</option>
-                            <option value="finance-openai">💰 Finance (OpenAI)</option>
-                            <option value="knowledge-openai">📚 Knowledge (OpenAI)</option>
-                            <option value="websearch-openai">🔍 Web Search (OpenAI)</option>
+                            <option value="finance-openai">Finance (OpenAI)</option>
+                            <option value="knowledge-openai">Knowledge (OpenAI)</option>
+                            <option value="websearch-openai">Web Search (OpenAI)</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -2313,8 +2313,8 @@
     <div class="modal-overlay" id="infoModal">
         <div class="modal">
             <div class="modal-header">
-                <h3>Como Funciona o SSE</h3>
-                <button class="modal-close" onclick="closeModal('infoModal')">×</button>
+                <h3><i class="fa-solid fa-circle-info"></i> Como Funciona o SSE</h3>
+                <button class="modal-close" onclick="closeModal('infoModal')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <div class="info-content">
@@ -2367,8 +2367,8 @@ while (true) {
     <div class="modal-overlay" id="agentInfoModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 id="agentInfoTitle">Informações do Agente</h3>
-                <button class="modal-close" onclick="closeModal('agentInfoModal')">×</button>
+                <h3 id="agentInfoTitle"><i class="fa-solid fa-robot"></i> Informações do Agente</h3>
+                <button class="modal-close" onclick="closeModal('agentInfoModal')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <div class="agent-info-content" id="agentInfoContent">
@@ -2515,7 +2515,7 @@ while (true) {
                 agents.forEach(agent => {
                     const option = document.createElement('option');
                     option.value = agent.id;
-                    option.textContent = `${agent.available ? '✅' : '❌'} ${agent.name}`;
+                    option.textContent = `${agent.available ? '✓' : '✗'} ${agent.name}`;
                     option.disabled = !agent.available;
                     select.appendChild(option);
                 });
@@ -2597,8 +2597,8 @@ async function newConversation() {
             // Atualiza os contadores de tokens com os totais da conversa
             const conversation = conversations.find(c => c.id === id);
             if (conversation) {
-                tokensIn.textContent = `↑ ${conversation.totalTokensIn || 0}`;
-                tokensOut.textContent = `↓ ${conversation.totalTokensOut || 0}`;
+                tokensIn.innerHTML = `<i class="fa-solid fa-arrow-up"></i> ${conversation.totalTokensIn || 0}`;
+                tokensOut.innerHTML = `<i class="fa-solid fa-arrow-down"></i> ${conversation.totalTokensOut || 0}`;
             }
         }
 
@@ -2643,7 +2643,7 @@ async function newConversation() {
                         <div class="title">${conv.title}</div>
                         <div class="meta">${date} • ${conv.messages.length} msgs ${tokensDisplay}</div>
                     </div>
-                    <button class="delete-btn" onclick="deleteConversation('${conv.id}', event)">🗑️</button>
+                    <button class="delete-btn" onclick="deleteConversation('${conv.id}', event)"><i class="fa-regular fa-trash-can"></i></button>
                 `;
                 conversationsList.appendChild(div);
             });
@@ -2651,18 +2651,18 @@ async function newConversation() {
 
         function getAgentIcon(agentId) {
             const icons = {
-                'simple-openai': '⚪',
-                'simple-gemini': '⚪',
-                'openai': '🔵',
-                'gemini': '🔴',
-                'finance-openai': '💰',
-                'finance-gemini': '💰',
-                'knowledge-openai': '📚',
-                'knowledge-gemini': '📚',
-                'websearch-openai': '🔍',
-                'websearch-gemini': '🔍'
+                'simple-openai': '<i class="fa-regular fa-circle"></i>',
+                'simple-gemini': '<i class="fa-regular fa-circle"></i>',
+                'openai': '<i class="fa-solid fa-robot"></i>',
+                'gemini': '<i class="fa-solid fa-bolt"></i>',
+                'finance-openai': '<i class="fa-solid fa-chart-line"></i>',
+                'finance-gemini': '<i class="fa-solid fa-chart-line"></i>',
+                'knowledge-openai': '<i class="fa-solid fa-book"></i>',
+                'knowledge-gemini': '<i class="fa-solid fa-book"></i>',
+                'websearch-openai': '<i class="fa-solid fa-magnifying-glass"></i>',
+                'websearch-gemini': '<i class="fa-solid fa-magnifying-glass"></i>'
             };
-            return icons[agentId] || '💬';
+            return icons[agentId] || '<i class="fa-regular fa-message"></i>';
         }
 
         function renderCurrentConversation() {
@@ -2671,7 +2671,7 @@ async function newConversation() {
             if (!currentConversationId) {
                 chatMessages.innerHTML = `
                     <div class="empty-state">
-                        <div class="icon">✨</div>
+                        <div class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                         <h3>Inicie uma conversa</h3>
                         <p>Clique em "Nova Conversa" para começar!</p>
                     </div>
@@ -2683,7 +2683,7 @@ async function newConversation() {
             if (!conversation || conversation.messages.length === 0) {
                 chatMessages.innerHTML = `
                     <div class="empty-state">
-                        <div class="icon">✨</div>
+                        <div class="icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                         <h3>Nova conversa</h3>
                         <p>Faça uma pergunta para começar!</p>
                     </div>
@@ -2735,7 +2735,7 @@ async function newConversation() {
         }
 
         function updateStatus(text, streaming = false) {
-            statusText.textContent = text;
+            statusText.innerHTML = text;
             statusDot.className = `status-dot ${streaming ? 'streaming' : ''}`;
         }
 
@@ -2798,8 +2798,8 @@ async function newConversation() {
             sendButton.disabled = true;
             sendButton.classList.add('loading');
             currentTokensOut = 0;
-            tokensIn.textContent = '↑ ...';
-            tokensOut.textContent = '↓ 0';
+            tokensIn.innerHTML = '<i class="fa-solid fa-arrow-up"></i> ...';
+            tokensOut.innerHTML = '<i class="fa-solid fa-arrow-down"></i> 0';
             const startTime = Date.now();
 
             // Usa session se disponível, senão usa quick chat
@@ -2867,18 +2867,18 @@ async function newConversation() {
                                     // Mostra tokens de entrada
                                     lastTokensIn = parsed.tokens_in || 0;
                                     const conv = conversations.find(c => c.id === currentConversationId);
-                                    tokensIn.textContent = `↑ ${(conv?.totalTokensIn || 0) + lastTokensIn}`;
+                                    tokensIn.innerHTML = `<i class="fa-solid fa-arrow-up"></i> ${(conv?.totalTokensIn || 0) + lastTokensIn}`;
                                 } else if (parsed.type === 'token') {
                                     responseText += parsed.content;
                                     currentTokensOut += Math.ceil(parsed.content.length / 4);
                                     responseBubble.innerHTML = responseText + '<span class="cursor-blink"></span>';
                                     // Atualiza tokens de saída em tempo real
                                     const conv = conversations.find(c => c.id === currentConversationId);
-                                    tokensOut.textContent = `↓ ${(conv?.totalTokensOut || 0) + currentTokensOut}`;
+                                    tokensOut.innerHTML = `<i class="fa-solid fa-arrow-down"></i> ${(conv?.totalTokensOut || 0) + currentTokensOut}`;
                                     chatMessages.scrollTop = chatMessages.scrollHeight;
                                 } else if (parsed.type === 'end') {
                                     const elapsed = Date.now() - startTime;
-                                    responseTime.textContent = `${elapsed}ms`;
+                                    responseTime.innerHTML = `<i class="fa-regular fa-clock"></i> ${elapsed}ms`;
                                     // Atualiza com valores finais do servidor
                                     lastTokensIn = parsed.tokens_in || lastTokensIn;
                                     lastTokensOut = parsed.tokens_out || currentTokensOut;
@@ -2909,17 +2909,17 @@ async function newConversation() {
                 conversation.totalTokensOut = (conversation.totalTokensOut || 0) + lastTokensOut;
 
                 // Atualiza display com totais
-                tokensIn.textContent = `↑ ${conversation.totalTokensIn}`;
-                tokensOut.textContent = `↓ ${conversation.totalTokensOut}`;
+                tokensIn.innerHTML = `<i class="fa-solid fa-arrow-up"></i> ${conversation.totalTokensIn}`;
+                tokensOut.innerHTML = `<i class="fa-solid fa-arrow-down"></i> ${conversation.totalTokensOut}`;
 
                 saveConversations();
                 renderConversationsList();
 
-                updateStatus(sessionId ? '🧠 Pronto (com memória)' : 'Pronto', false);
+                updateStatus(sessionId ? '<i class="fa-solid fa-brain"></i> Pronto (com memória)' : 'Pronto', false);
 
             } catch (error) {
                 console.error('Erro no streaming:', error);
-                responseBubble.innerHTML = `❌ Erro: ${error.message}`;
+                responseBubble.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Erro: ${error.message}`;
                 responseBubble.className = 'bubble';
                 updateStatus('Erro', false);
             }
@@ -2971,14 +2971,14 @@ async function newConversation() {
                 renderConversationsList();
 
                 // Mostra totais acumulados
-                tokensIn.textContent = `↑ ${conversation.totalTokensIn}`;
-                tokensOut.textContent = `↓ ${conversation.totalTokensOut}`;
-                responseTime.textContent = `${elapsed}ms`;
-                updateStatus(sessionId ? '🧠 Pronto (com memória)' : 'Pronto', false);
+                tokensIn.innerHTML = `<i class="fa-solid fa-arrow-up"></i> ${conversation.totalTokensIn}`;
+                tokensOut.innerHTML = `<i class="fa-solid fa-arrow-down"></i> ${conversation.totalTokensOut}`;
+                responseTime.innerHTML = `<i class="fa-regular fa-clock"></i> ${elapsed}ms`;
+                updateStatus(sessionId ? '<i class="fa-solid fa-brain"></i> Pronto (com memória)' : 'Pronto', false);
 
             } catch (error) {
                 console.error('Erro:', error);
-                addMessageToDOM(`❌ Erro: ${error.message}`, false);
+                addMessageToDOM(`<i class="fa-solid fa-circle-exclamation"></i> Erro: ${error.message}`, false);
                 updateStatus('Erro', false);
             }
         }
@@ -3025,18 +3025,18 @@ async function newConversation() {
             const toolsMap = {
                 'simple-openai': [],
                 'simple-gemini': [],
-                'openai': ['🧮 Calculadora', '📅 Data/Hora', '🔍 Web Search', '📚 RAG'],
-                'gemini': ['🧮 Calculadora', '📅 Data/Hora', '🔍 Web Search', '📚 RAG'],
-                'finance-openai': ['💰 Crypto', '📊 Ações', '💱 Forex'],
-                'finance-gemini': ['💰 Crypto', '📊 Ações', '💱 Forex'],
-                'knowledge-openai': ['📖 Wikipedia Summary', '🔎 Wikipedia Search'],
-                'knowledge-gemini': ['📖 Wikipedia Summary', '🔎 Wikipedia Search'],
-                'websearch-openai': ['🔍 Web Search (DuckDuckGo)'],
-                'websearch-gemini': ['🔍 Web Search (DuckDuckGo)'],
-                'mcp-fetch': ['🌐 Fetch URL'],
-                'mcp-time': ['🕐 Data/Hora'],
-                'mcp-filesystem': ['📁 Filesystem'],
-                'mcp-demo': ['🔌 MCP Demo']
+                'openai': ['<i class="fa-solid fa-calculator"></i> Calculadora', '<i class="fa-regular fa-calendar"></i> Data/Hora', '<i class="fa-solid fa-magnifying-glass"></i> Web Search', '<i class="fa-solid fa-database"></i> RAG'],
+                'gemini': ['<i class="fa-solid fa-calculator"></i> Calculadora', '<i class="fa-regular fa-calendar"></i> Data/Hora', '<i class="fa-solid fa-magnifying-glass"></i> Web Search', '<i class="fa-solid fa-database"></i> RAG'],
+                'finance-openai': ['<i class="fa-brands fa-bitcoin"></i> Crypto', '<i class="fa-solid fa-chart-line"></i> Ações', '<i class="fa-solid fa-money-bill-transfer"></i> Forex'],
+                'finance-gemini': ['<i class="fa-brands fa-bitcoin"></i> Crypto', '<i class="fa-solid fa-chart-line"></i> Ações', '<i class="fa-solid fa-money-bill-transfer"></i> Forex'],
+                'knowledge-openai': ['<i class="fa-brands fa-wikipedia-w"></i> Wikipedia Summary', '<i class="fa-solid fa-magnifying-glass"></i> Wikipedia Search'],
+                'knowledge-gemini': ['<i class="fa-brands fa-wikipedia-w"></i> Wikipedia Summary', '<i class="fa-solid fa-magnifying-glass"></i> Wikipedia Search'],
+                'websearch-openai': ['<i class="fa-solid fa-globe"></i> Web Search (DuckDuckGo)'],
+                'websearch-gemini': ['<i class="fa-solid fa-globe"></i> Web Search (DuckDuckGo)'],
+                'mcp-fetch': ['<i class="fa-solid fa-link"></i> Fetch URL'],
+                'mcp-time': ['<i class="fa-regular fa-clock"></i> Data/Hora'],
+                'mcp-filesystem': ['<i class="fa-regular fa-folder-open"></i> Filesystem'],
+                'mcp-demo': ['<i class="fa-solid fa-plug"></i> MCP Demo']
             };
 
             const tools = toolsMap[agentId] || [];
@@ -3056,16 +3056,16 @@ async function newConversation() {
                     <div class="agent-info-item">
                         <div class="label">Status</div>
                         <div class="value ${agent.available ? 'success' : 'warning'}">
-                            ${agent.available ? '✅ Disponível' : '⚠️ API Key não configurada'}
+                            ${agent.available ? '<i class="fa-solid fa-circle-check"></i> Disponível' : '<i class="fa-solid fa-triangle-exclamation"></i> API Key não configurada'}
                         </div>
                     </div>
                     <div class="agent-info-item">
                         <div class="label">Tem Tools</div>
-                        <div class="value">${agent.has_tools ? '✅ Sim' : '❌ Não'}</div>
+                        <div class="value">${agent.has_tools ? '<i class="fa-solid fa-circle-check"></i> Sim' : '<i class="fa-solid fa-circle-xmark"></i> Não'}</div>
                     </div>
                     <div class="agent-info-item">
                         <div class="label">Suporta RAG</div>
-                        <div class="value">${agent.has_rag ? '✅ Sim' : '❌ Não'}</div>
+                        <div class="value">${agent.has_rag ? '<i class="fa-solid fa-circle-check"></i> Sim' : '<i class="fa-solid fa-circle-xmark"></i> Não'}</div>
                     </div>
                     <div class="agent-info-item">
                         <div class="label">Especialização</div>
