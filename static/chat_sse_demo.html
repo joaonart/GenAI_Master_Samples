@@ -596,11 +596,15 @@
             display: flex;
             gap: 4px;
             margin-top: 8px;
+            height: 0;
+            overflow: hidden;
             opacity: 0;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.2s ease, height 0.2s ease;
         }
 
         .message.assistant:hover .message-actions {
+            height: auto;
+            overflow: visible;
             opacity: 1;
         }
 
@@ -640,8 +644,22 @@
             background: #3d2d54;
         }
 
+
+        [data-theme="chatgpt"] .message-actions button {
+            color: #9b9b9b;
+        }
+
         [data-theme="chatgpt"] .message-actions button:hover {
             background: #2f2f2f;
+            color: #ececec;
+        }
+
+        [data-theme="chatgpt"] .message-actions button.active {
+            color: #10a37f;
+        }
+
+        [data-theme="chatgpt"] .message-actions button.copied {
+            color: #10a37f;
         }
 
         [data-theme="gemini"] .message-actions button:hover {
@@ -825,6 +843,19 @@
             max-width: 100%;
             color: #d1d5db;
             line-height: 1.75;
+        }
+
+        [data-theme="chatgpt"] .message.assistant .message-actions {
+            height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease, height 0.2s ease;
+        }
+
+        [data-theme="chatgpt"] .message.assistant:hover .message-actions {
+            height: auto;
+            overflow: visible;
+            opacity: 1;
         }
 
         [data-theme="chatgpt"] .chat-input-container {
