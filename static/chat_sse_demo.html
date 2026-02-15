@@ -1580,6 +1580,126 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Botão de Anexar Arquivo */
+        .chat-input .attach-btn {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin-right: -5px;
+        }
+
+        .chat-input .attach-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .chat-input .attach-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Área de Arquivos Anexados */
+        .attached-files {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-width: 800px;
+            margin: 10px auto 0;
+            padding: 0;
+        }
+
+        .attached-file {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            animation: fadeIn 0.2s ease;
+        }
+
+        .attached-file .file-icon {
+            color: var(--accent-color);
+        }
+
+        .attached-file .file-name {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .attached-file .file-size {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .attached-file .remove-file {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .attached-file .remove-file:hover {
+            color: var(--error-color);
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        /* Estilos específicos por tema */
+        [data-theme="default"] .attach-btn:hover {
+            background: #3d2d54;
+        }
+
+        [data-theme="chatgpt"] .attach-btn:hover {
+            background: #2f2f2f;
+        }
+
+        [data-theme="gemini"] .attach-btn:hover {
+            background: #2a2a2a;
+        }
+
+        /* Tags de Anexos nas Mensagens */
+        .message-attachments {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .attachment-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .attachment-tag i {
+            font-size: 0.7rem;
+        }
+
         /* Status Bar */
         .status-bar {
             display: flex;
@@ -2292,10 +2412,17 @@
 
                 <div class="chat-input-container">
                     <div class="chat-input">
+                        <button class="attach-btn" id="attachButton" onclick="document.getElementById('fileInput').click()" title="Anexar arquivo">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </button>
+                        <input type="file" id="fileInput" multiple accept=".txt,.pdf,.doc,.docx,.md,.json,.csv,.xml,.html,.css,.js,.py,.java,.c,.cpp,.h,.hpp,.ts,.tsx,.jsx,.yml,.yaml" style="display: none;" onchange="handleFileSelect(event)">
                         <input type="text" id="messageInput" placeholder="Digite sua mensagem..." autocomplete="off">
                         <button id="sendButton" onclick="sendMessage()" title="Enviar mensagem">
                             <i class="fa-solid fa-arrow-up"></i>
                         </button>
+                    </div>
+                    <div class="attached-files" id="attachedFiles" style="display: none;">
+                        <!-- Arquivos anexados aparecerão aqui -->
                     </div>
                 </div>
             </div>
@@ -2464,6 +2591,7 @@ while (true) {
         let currentConversationId = null;
         let isStreaming = false;
         let currentTokensOut = 0;
+        let attachedFiles = []; // Arquivos anexados pendentes
 
         // Mapa de sessionId da API por conversa
         let apiSessions = {};
@@ -2478,6 +2606,8 @@ while (true) {
         const tokensOut = document.getElementById('tokensOut');
         const responseTime = document.getElementById('responseTime');
         const conversationsList = document.getElementById('conversationsList');
+        const attachedFilesContainer = document.getElementById('attachedFiles');
+        const fileInput = document.getElementById('fileInput');
 
 
         // ============================================
@@ -2627,6 +2757,151 @@ while (true) {
                 sidebar.style.width = '280px';
                 localStorage.setItem('genai_sidebar_width', 280);
             });
+        }
+
+        // ============================================
+        // GERENCIAMENTO DE ARQUIVOS ANEXADOS
+        // ============================================
+
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+
+            files.forEach(file => {
+                // Verifica se o arquivo já foi anexado
+                if (attachedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    return;
+                }
+
+                // Limite de tamanho (10MB por arquivo)
+                const maxSize = 10 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    alert(`O arquivo "${file.name}" excede o limite de 10MB.`);
+                    return;
+                }
+
+                // Lê o conteúdo do arquivo
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    attachedFiles.push({
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        content: e.target.result
+                    });
+                    renderAttachedFiles();
+                };
+
+                // Lê como texto para arquivos de texto, caso contrário como base64
+                if (file.type.startsWith('text/') ||
+                    ['.txt', '.md', '.json', '.csv', '.xml', '.html', '.css', '.js', '.py', '.java', '.c', '.cpp', '.h', '.ts', '.tsx', '.jsx', '.yml', '.yaml']
+                    .some(ext => file.name.toLowerCase().endsWith(ext))) {
+                    reader.readAsText(file);
+                } else {
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Limpa o input para permitir selecionar o mesmo arquivo novamente
+            event.target.value = '';
+        }
+
+        function renderAttachedFiles() {
+            if (attachedFiles.length === 0) {
+                attachedFilesContainer.style.display = 'none';
+                return;
+            }
+
+            attachedFilesContainer.style.display = 'flex';
+            attachedFilesContainer.innerHTML = attachedFiles.map((file, index) => `
+                <div class="attached-file">
+                    <i class="fa-solid ${getFileIcon(file.name)} file-icon"></i>
+                    <span class="file-name" title="${file.name}">${file.name}</span>
+                    <span class="file-size">${formatFileSize(file.size)}</span>
+                    <button class="remove-file" onclick="removeAttachedFile(${index})" title="Remover arquivo">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeAttachedFile(index) {
+            attachedFiles.splice(index, 1);
+            renderAttachedFiles();
+        }
+
+        function clearAttachedFiles() {
+            attachedFiles = [];
+            renderAttachedFiles();
+        }
+
+        function getFileIcon(filename) {
+            const ext = filename.toLowerCase().split('.').pop();
+            const iconMap = {
+                // Documentos
+                'pdf': 'fa-file-pdf',
+                'doc': 'fa-file-word',
+                'docx': 'fa-file-word',
+                'txt': 'fa-file-lines',
+                'md': 'fa-file-lines',
+                // Dados
+                'json': 'fa-file-code',
+                'xml': 'fa-file-code',
+                'csv': 'fa-file-csv',
+                'yml': 'fa-file-code',
+                'yaml': 'fa-file-code',
+                // Código
+                'js': 'fa-file-code',
+                'ts': 'fa-file-code',
+                'jsx': 'fa-file-code',
+                'tsx': 'fa-file-code',
+                'py': 'fa-file-code',
+                'java': 'fa-file-code',
+                'c': 'fa-file-code',
+                'cpp': 'fa-file-code',
+                'h': 'fa-file-code',
+                'hpp': 'fa-file-code',
+                'html': 'fa-file-code',
+                'css': 'fa-file-code',
+                // Imagens
+                'png': 'fa-file-image',
+                'jpg': 'fa-file-image',
+                'jpeg': 'fa-file-image',
+                'gif': 'fa-file-image',
+                'svg': 'fa-file-image',
+                'webp': 'fa-file-image'
+            };
+            return iconMap[ext] || 'fa-file';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function getAttachedFilesContext() {
+            if (attachedFiles.length === 0) return '';
+
+            let context = '\n\n--- Arquivos Anexados ---\n';
+            attachedFiles.forEach(file => {
+                context += `\n📎 ${file.name} (${formatFileSize(file.size)}):\n`;
+                if (file.content.startsWith('data:')) {
+                    context += '[Arquivo binário - conteúdo não exibido]\n';
+                } else {
+                    // Limita o conteúdo para não sobrecarregar
+                    const maxChars = 5000;
+                    if (file.content.length > maxChars) {
+                        context += file.content.substring(0, maxChars) + '\n... [conteúdo truncado]\n';
+                    } else {
+                        context += file.content + '\n';
+                    }
+                }
+            });
+            context += '--- Fim dos Arquivos ---\n';
+
+            return context;
         }
 
         // Modal functions
@@ -2931,12 +3206,30 @@ async function newConversation() {
                 }
             }
 
-            // Adiciona mensagem do usuário
-            addMessageToDOM(message, true);
+            // Prepara mensagem com arquivos anexados
+            const filesContext = getAttachedFilesContext();
+            const fullMessage = message + filesContext;
+
+            // Mostra mensagem do usuário (com indicação de arquivos se houver)
+            let displayMessage = message;
+            if (attachedFiles.length > 0) {
+                displayMessage += `\n\n<div class="message-attachments">${attachedFiles.map(f =>
+                    `<span class="attachment-tag"><i class="fa-solid fa-paperclip"></i> ${f.name}</span>`
+                ).join(' ')}</div>`;
+            }
+            addMessageToDOM(displayMessage, true);
             messageInput.value = '';
 
-            // Salva na conversa
-            conversation.messages.push({ role: 'user', content: message });
+            // Salva na conversa (com contexto completo)
+            conversation.messages.push({
+                role: 'user',
+                content: fullMessage,
+                displayContent: displayMessage,
+                attachments: attachedFiles.map(f => ({ name: f.name, size: f.size }))
+            });
+
+            // Limpa arquivos anexados após envio
+            clearAttachedFiles();
 
             // Atualiza título se for a primeira mensagem
             if (conversation.messages.length === 1) {
@@ -2958,9 +3251,9 @@ async function newConversation() {
             const sessionId = conversation.apiSessionId;
 
             if (mode === 'stream') {
-                await sendStreamingMessage(apiUrl, agentId, message, temperature, startTime, sessionId);
+                await sendStreamingMessage(apiUrl, agentId, fullMessage, temperature, startTime, sessionId);
             } else {
-                await sendNormalMessage(apiUrl, agentId, message, temperature, startTime, sessionId);
+                await sendNormalMessage(apiUrl, agentId, fullMessage, temperature, startTime, sessionId);
             }
 
             isStreaming = false;
