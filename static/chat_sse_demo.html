@@ -103,11 +103,22 @@
         [data-theme="chatgpt"] .chat-input {
           background: #2f2f2f;
           border: 1px solid rgba(255,255,255,0.12);
-          border-radius: 26px;
+          border-radius: 24px;
+          padding: 12px 16px;
+          gap: 8px;
         }
 
         [data-theme="chatgpt"] .chat-input:focus-within {
           border-color: rgba(255,255,255,0.22);
+          background: #2a2a2a;
+        }
+
+        [data-theme="chatgpt"] .chat-input textarea {
+          color: #ececec;
+        }
+
+        [data-theme="chatgpt"] .chat-input textarea::placeholder {
+          color: #9b9b9b;
         }
 
         [data-theme="chatgpt"] .message.assistant .bubble {
@@ -886,16 +897,16 @@
 
         [data-theme="chatgpt"] .chat-input {
             background: #2f2f2f;
-            border-radius: 26px;
+            border-radius: 24px;
             border: 1px solid rgba(255,255,255,0.12);
-            padding: 4px 4px 4px 8px;
-            gap: 0;
+            padding: 12px 16px;
+            gap: 8px;
             max-width: 48rem;
             transition: border-color 0.2s, background 0.2s;
         }
 
         [data-theme="chatgpt"] .chat-input-container:has(.attached-files[style*="flex"]) .chat-input {
-            border-radius: 0 0 26px 26px;
+            border-radius: 0 0 24px 24px;
             border-top: none;
         }
 
@@ -904,47 +915,37 @@
             background: #2a2a2a;
         }
 
-        [data-theme="chatgpt"] .chat-input input {
+        [data-theme="chatgpt"] .chat-input textarea {
             background: transparent;
-            border: none;
-            border-radius: 26px;
-            padding: 12px 12px;
             color: #ececec;
-            font-size: 1rem;
         }
 
-        [data-theme="chatgpt"] .chat-input input::placeholder {
+        [data-theme="chatgpt"] .chat-input textarea::placeholder {
             color: #9b9b9b;
         }
 
-        [data-theme="chatgpt"] .chat-input input:focus {
-            border: none;
-            outline: none;
-        }
-
-        [data-theme="chatgpt"] .chat-input button {
+        [data-theme="chatgpt"] .chat-input button#sendButton {
             background: #676767;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            min-width: 32px;
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
             padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 4px;
             color: #fff;
             border: none;
             transition: background 0.2s;
         }
 
-        [data-theme="chatgpt"] .chat-input button:hover:not(:disabled) {
+        [data-theme="chatgpt"] .chat-input button#sendButton:hover:not(:disabled) {
             background: #8e8e8e;
             transform: none;
             box-shadow: none;
         }
 
-        [data-theme="chatgpt"] .chat-input button:disabled {
+        [data-theme="chatgpt"] .chat-input button#sendButton:disabled {
             background: #424242;
             opacity: 0.5;
             cursor: not-allowed;
@@ -1201,16 +1202,16 @@
 
         [data-theme="gemini"] .chat-input {
             background: #1e1e1e;
-            border-radius: 28px;
+            border-radius: 24px;
             border: 1px solid rgba(138, 180, 248, 0.08);
-            padding: 4px 4px 4px 8px;
-            gap: 0;
+            padding: 12px 16px;
+            gap: 8px;
             max-width: 48rem;
             transition: border-color 0.2s, background 0.2s;
         }
 
         [data-theme="gemini"] .chat-input-container:has(.attached-files[style*="flex"]) .chat-input {
-            border-radius: 0 0 28px 28px;
+            border-radius: 0 0 24px 24px;
             border-top: none;
         }
 
@@ -1219,25 +1220,16 @@
             background: #1a1a1a;
         }
 
-        [data-theme="gemini"] .chat-input input {
+        [data-theme="gemini"] .chat-input textarea {
             background: transparent;
-            border: none;
-            border-radius: 28px;
-            padding: 14px 12px;
             color: #e3e3e3;
-            font-size: 1rem;
         }
 
-        [data-theme="gemini"] .chat-input input::placeholder {
+        [data-theme="gemini"] .chat-input textarea::placeholder {
             color: #7a7a7a;
         }
 
-        [data-theme="gemini"] .chat-input input:focus {
-            border: none;
-            outline: none;
-        }
-
-        [data-theme="gemini"] .chat-input button {
+        [data-theme="gemini"] .chat-input button#sendButton {
             background: transparent;
             border: none;
             border-radius: 50%;
@@ -1248,12 +1240,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 4px;
             color: #a8a8a8;
             transition: background 0.2s, color 0.2s;
         }
 
-        [data-theme="gemini"] .chat-input button:hover:not(:disabled) {
+        [data-theme="gemini"] .chat-input button#sendButton:hover:not(:disabled) {
             background: #2a2a2a;
             color: #e3e3e3;
             transform: none;
@@ -1520,16 +1511,16 @@
 
         [data-theme="default"] .chat-input {
             background: #251d33;
-            border-radius: 28px;
+            border-radius: 24px;
             border: 1px solid rgba(179, 136, 255, 0.08);
-            padding: 4px 4px 4px 8px;
-            gap: 0;
+            padding: 12px 16px;
+            gap: 8px;
             max-width: 48rem;
             transition: border-color 0.2s, background 0.2s;
         }
 
         [data-theme="default"] .chat-input-container:has(.attached-files[style*="flex"]) .chat-input {
-            border-radius: 0 0 28px 28px;
+            border-radius: 0 0 24px 24px;
             border-top: none;
         }
 
@@ -1538,36 +1529,20 @@
             background: #2a1f3a;
         }
 
-        [data-theme="default"] .chat-input input {
+        [data-theme="default"] .chat-input textarea {
             background: transparent;
-            border: none;
-            border-radius: 28px;
-            padding: 14px 12px;
             color: #e3e3e3;
-            font-size: 1rem;
         }
 
-        [data-theme="default"] .chat-input input::placeholder {
+        [data-theme="default"] .chat-input textarea::placeholder {
             color: #7a7a7a;
         }
 
-        [data-theme="default"] .chat-input input:focus {
-            border: none;
-            outline: none;
+        [data-theme="default"] .chat-input button#sendButton {
+            background: var(--accent-gradient);
         }
 
-        [data-theme="default"] .chat-input button {
-            background: transparent;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            min-width: 36px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 4px;
+        [data-theme="default"] .chat-input button#sendButton:hover:not(:disabled) {
             color: #a8a8a8;
             transition: background 0.2s, color 0.2s;
         }
@@ -1685,31 +1660,60 @@
 
         .chat-input {
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            gap: 8px;
             max-width: 800px;
             margin: 0 auto;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 15px 20px;
-            border-radius: 25px;
-            border: 1px solid var(--border-color);
+            padding: 12px 16px;
             background: var(--bg-input);
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            transition: all 0.2s ease;
         }
 
-        .chat-input input:focus {
-            outline: none;
+        .chat-input:focus-within {
             border-color: var(--accent-color);
         }
 
+        .chat-input textarea {
+            width: 100%;
+            min-height: 24px;
+            max-height: 120px;
+            padding: 4px 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            line-height: 1.5;
+            resize: none;
+            overflow-y: auto;
+        }
+
+        .chat-input textarea:focus {
+            outline: none;
+        }
+
+        .chat-input textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .chat-input-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-input-actions-left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .chat-input button {
-            width: 48px;
-            height: 48px;
-            min-width: 48px;
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
             border-radius: 50%;
             border: none;
             background: var(--accent-gradient);
@@ -1723,8 +1727,8 @@
         }
 
         .chat-input button svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
         }
 
         .chat-input button:hover:not(:disabled) {
@@ -1743,7 +1747,7 @@
             pointer-events: none;
         }
 
-        .chat-input button.loading svg {
+        .chat-input button.loading i {
             animation: spin 1s linear infinite;
         }
 
@@ -1763,10 +1767,11 @@
         }
 
         /* Botão de Anexar Arquivo */
-        .chat-input .attach-btn {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
+        .chat-input .attach-btn,
+        .chat-input .agent-selector-btn {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
             border-radius: 50%;
             border: none;
             background: transparent;
@@ -1777,16 +1782,17 @@
             align-items: center;
             justify-content: center;
             padding: 0;
-            margin-right: -5px;
         }
 
-        .chat-input .attach-btn:hover {
+        .chat-input .attach-btn:hover,
+        .chat-input .agent-selector-btn:hover {
             background: var(--bg-hover);
             color: var(--text-primary);
         }
 
-        .chat-input .attach-btn i {
-            font-size: 1.1rem;
+        .chat-input .attach-btn i,
+        .chat-input .agent-selector-btn i {
+            font-size: 1rem;
         }
 
         /* Seletor de Agente */
@@ -1794,27 +1800,6 @@
             position: relative;
         }
 
-        .agent-selector-btn {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            border-radius: 50%;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            margin-right: -5px;
-        }
-
-        .agent-selector-btn:hover {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-        }
 
         .agent-selector-btn.active {
             color: var(--accent-color);
@@ -2777,25 +2762,29 @@
                         <!-- Arquivos anexados aparecerão aqui -->
                     </div>
                     <div class="chat-input">
-                        <button class="attach-btn" id="attachButton" onclick="document.getElementById('fileInput').click()" title="Anexar arquivo">
-                            <i class="fa-solid fa-paperclip"></i>
-                        </button>
-                        <input type="file" id="fileInput" multiple accept=".txt,.pdf,.doc,.docx,.md,.json,.csv,.xml,.html,.css,.js,.py,.java,.c,.cpp,.h,.hpp,.ts,.tsx,.jsx,.yml,.yaml" style="display: none;" onchange="handleFileSelect(event)">
-                        <div class="agent-selector-wrapper">
-                            <button class="agent-selector-btn" id="agentSelectorBtn" onclick="toggleAgentDropdown()" title="Selecionar agente">
-                                <i class="fa-solid fa-robot"></i>
-                            </button>
-                            <div class="agent-dropdown" id="agentDropdown">
-                                <div class="agent-dropdown-header">Selecionar Agente</div>
-                                <div class="agent-dropdown-list" id="agentDropdownList">
-                                    <!-- Agentes serão listados aqui -->
+                        <textarea id="messageInput" placeholder="Digite sua mensagem..." rows="1" autocomplete="off"></textarea>
+                        <div class="chat-input-actions">
+                            <div class="chat-input-actions-left">
+                                <button class="attach-btn" id="attachButton" onclick="document.getElementById('fileInput').click()" title="Anexar arquivo">
+                                    <i class="fa-solid fa-paperclip"></i>
+                                </button>
+                                <input type="file" id="fileInput" multiple accept=".txt,.pdf,.doc,.docx,.md,.json,.csv,.xml,.html,.css,.js,.py,.java,.c,.cpp,.h,.hpp,.ts,.tsx,.jsx,.yml,.yaml" style="display: none;" onchange="handleFileSelect(event)">
+                                <div class="agent-selector-wrapper">
+                                    <button class="agent-selector-btn" id="agentSelectorBtn" onclick="toggleAgentDropdown()" title="Selecionar agente">
+                                        <i class="fa-solid fa-robot"></i>
+                                    </button>
+                                    <div class="agent-dropdown" id="agentDropdown">
+                                        <div class="agent-dropdown-header">Selecionar Agente</div>
+                                        <div class="agent-dropdown-list" id="agentDropdownList">
+                                            <!-- Agentes serão listados aqui -->
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <button id="sendButton" onclick="sendMessage()" title="Enviar mensagem">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </button>
                         </div>
-                        <input type="text" id="messageInput" placeholder="Digite sua mensagem..." autocomplete="off">
-                        <button id="sendButton" onclick="sendMessage()" title="Enviar mensagem">
-                            <i class="fa-solid fa-arrow-up"></i>
-                        </button>
                     </div>
                     <p class="chat-disclaimer">A IA pode cometer erros. Sempre valide as informações.</p>
                 </div>
@@ -3726,6 +3715,7 @@ async function newConversation() {
             }
             addMessageToDOM(displayMessage, true);
             messageInput.value = '';
+            messageInput.style.height = 'auto'; // Reset altura do textarea
 
             // Salva na conversa (com contexto completo)
             conversation.messages.push({
@@ -4147,11 +4137,24 @@ async function newConversation() {
             initTooltips();
             initSidebarResize();
 
-            messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !isStreaming) sendMessage();
+            // Auto-resize do textarea
+            messageInput.addEventListener('input', autoResizeTextarea);
+
+            // Enter para enviar, Shift+Enter para nova linha
+            messageInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey && !isStreaming) {
+                    e.preventDefault();
+                    sendMessage();
+                }
             });
         });
+
+        function autoResizeTextarea() {
+            messageInput.style.height = 'auto';
+            const maxHeight = 120; // ~4 linhas
+            const newHeight = Math.min(messageInput.scrollHeight, maxHeight);
+            messageInput.style.height = newHeight + 'px';
+        }
     </script>
 </body>
 </html>
-
