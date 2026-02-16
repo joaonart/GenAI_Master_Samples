@@ -43,6 +43,9 @@ from knowledge_base import (
     SUPPORTED_FORMATS
 )
 
+# Importa templates de prompts
+from templates import get_template
+
 # Carrega variáveis de ambiente do arquivo .env
 load_dotenv()
 
@@ -158,7 +161,8 @@ AVAILABLE_AGENTS = {
         "models": ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-3-flash-preview"],
         "extra_params": ["top_k"],
         "provider": "google",
-        "is_specialist": True
+        "is_specialist": True,
+        "template_type": "websearch"
     },
     # "🔌 MCP Demo (OpenAI)": {
     #     "class": MCPAgentDemo,
@@ -180,7 +184,8 @@ AVAILABLE_AGENTS = {
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True,
-        "mcp_server": "fetch"
+        "mcp_server": "fetch",
+        "template_type": "default"
     }
 }
 
@@ -206,7 +211,8 @@ if MCP_REAL_AVAILABLE and MCPAgent is not None:
         "extra_params": ["top_k"],
         "provider": "google",
         "is_specialist": True,
-        "mcp_server": "fetch"
+        "mcp_server": "fetch",
+        "template_type": "websearch"
     }
     AVAILABLE_AGENTS["🔌 MCP Time (OpenAI)"] = {
         "class": MCPAgent,
@@ -217,7 +223,8 @@ if MCP_REAL_AVAILABLE and MCPAgent is not None:
         "extra_params": ["presence_penalty", "frequency_penalty"],
         "provider": "openai",
         "is_specialist": True,
-        "mcp_server": "time"
+        "mcp_server": "time",
+        "template_type": "default"
     }
     AVAILABLE_AGENTS["🔌 MCP Filesystem (OpenAI)"] = {
         "class": MCPAgent,
@@ -228,7 +235,8 @@ if MCP_REAL_AVAILABLE and MCPAgent is not None:
         "extra_params": ["presence_penalty", "frequency_penalty"],
         "provider": "openai",
         "is_specialist": True,
-        "mcp_server": "filesystem"
+        "mcp_server": "filesystem",
+        "template_type": "default"
     }
 
 
@@ -243,12 +251,52 @@ st.set_page_config(
 )
 
 # CSS customizado para melhorar a aparência
+# Inclui Font Awesome para usar ícones via HTML
 st.markdown("""
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+    /* Estilos para ícones Font Awesome */
+    .fa-icon { margin-right: 8px; }
+    
+    /* Links com ícones */
+    a i.fa-solid, a i.fa-brands, a i.fa-regular {
+        margin-right: 6px;
+    }
+    
+    /* Títulos com ícones */
+    h1 i, h2 i, h3 i, h4 i, h5 i, h6 i {
+        margin-right: 10px;
+    }
+    
+    /* Badge com ícone */
+    .icon-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        margin: 0.25rem;
+        border-radius: 1rem;
+        background-color: #e1e5eb;
+        font-size: 0.85rem;
+    }
+    .icon-badge i {
+        margin-right: 6px;
+    }
+    
+    /* Status indicators */
+    .status-success { color: #28a745; }
+    .status-error { color: #dc3545; }
+    .status-warning { color: #ffc107; }
+    .status-info { color: #17a2b8; }
+    
     /* Estilo do cabeçalho */
     .main-header {
         text-align: center;
         padding: 1rem 0;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .main-header i {
         background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -840,7 +888,7 @@ def display_sidebar():
                         st.session_state.agent = None
 
                 # Link para obter API key
-                st.markdown(f"[🔑 Obter API Key]({agent_config['api_key_url']})")
+                st.markdown(f'<a href="{agent_config["api_key_url"]}" target="_blank"><i class="fa-solid fa-key"></i> Obter API Key</a>', unsafe_allow_html=True)
 
         st.divider()
 
@@ -849,32 +897,58 @@ def display_sidebar():
         # -----------------------------------------------------------------
         st.subheader("4. Personalidade do Agente")
 
+        # Obtém o template específico para o tipo de agente selecionado
+        template_type = agent_config.get("template_type", "default")
+        agent_template = get_template(template_type)
+
+        # Inicializa valores no session_state se necessário (para persistir edições)
+        template_key = f"template_{selected_agent}"
+        if template_key not in st.session_state:
+            st.session_state[template_key] = {
+                "welcome": agent_template["welcome"],
+                "system_prompt": agent_template["system_prompt"],
+                "guardrails": agent_template["guardrails"]
+            }
+
+        # Detecta mudança de agente para resetar os templates
+        if "last_selected_agent" not in st.session_state:
+            st.session_state.last_selected_agent = selected_agent
+
+        if st.session_state.last_selected_agent != selected_agent:
+            # Agente mudou, carrega o template do novo agente
+            st.session_state[template_key] = {
+                "welcome": agent_template["welcome"],
+                "system_prompt": agent_template["system_prompt"],
+                "guardrails": agent_template["guardrails"]
+            }
+            st.session_state.last_selected_agent = selected_agent
+
         # Mensagem de Boas-vindas
         with st.expander("👋 Boas-vindas", expanded=False):
             welcome_message = st.text_area(
                 "Mensagem inicial exibida no chat",
-                value="""Olá! 👋 Sou seu assistente de IA.
+                value=st.session_state[template_key]["welcome"],
+                key=f"welcome_{selected_agent}",
+                height=120,
+                help="""
+                Mensagem exibida quando o chat é iniciado.
+                Use para apresentar o agente e suas capacidades.
+                """
+            )
+            # Atualiza o session_state com o valor editado
+            st.session_state[template_key]["welcome"] = welcome_message
 
-                Posso ajudá-lo com:
-                • Cálculos matemáticos
-                • Informações de data e hora
-                • Pesquisas na web
-                
-                Como posso ajudar você hoje?""",
-            height=120,
-            help="""
-            Mensagem exibida quando o chat é iniciado.
-            Use para apresentar o agente e suas capacidades.
-            """
-        )
+            # Botão para resetar ao template padrão
+            if st.button("🔄 Resetar Boas-vindas", key=f"reset_welcome_{selected_agent}"):
+                st.session_state[template_key]["welcome"] = agent_template["welcome"]
+                st.rerun()
 
         # System Prompt
         with st.expander("🧠 System Prompt", expanded=False):
             system_prompt = st.text_area(
                 "Define o comportamento do agente",
-                value="""Você é um assistente útil e amigável.
-                Responda de forma clara e educada.
-                Use as ferramentas disponíveis quando necessário.""",
+                value=st.session_state[template_key]["system_prompt"],
+                key=f"system_prompt_{selected_agent}",
                 height=120,
                 help="""
                 Define o comportamento e personalidade do agente.
@@ -882,17 +956,20 @@ def display_sidebar():
                 como o agente responde.
                 """
             )
+            # Atualiza o session_state com o valor editado
+            st.session_state[template_key]["system_prompt"] = system_prompt
+
+            # Botão para resetar ao template padrão
+            if st.button("🔄 Resetar System Prompt", key=f"reset_system_{selected_agent}"):
+                st.session_state[template_key]["system_prompt"] = agent_template["system_prompt"]
+                st.rerun()
 
         # Guardrails
         with st.expander("🛡️ Guardrails", expanded=False):
             guardrails = st.text_area(
                 "Regras de Segurança e Limites",
-                value="""REGRAS QUE VOCÊ DEVE SEGUIR:
-                1. Nunca forneça informações falsas
-                2. Se não souber algo, admita
-                3. Não discuta temas ilegais ou antiéticos
-                4. Mantenha respostas respeitosas e profissionais
-                5. Proteja a privacidade dos usuários""",
+                value=st.session_state[template_key]["guardrails"],
+                key=f"guardrails_{selected_agent}",
                 height=120,
                 help="""
                 Regras de segurança e limites que o agente deve respeitar.
@@ -900,6 +977,13 @@ def display_sidebar():
                 São adicionados ao final do system prompt.
                 """
             )
+            # Atualiza o session_state com o valor editado
+            st.session_state[template_key]["guardrails"] = guardrails
+
+            # Botão para resetar ao template padrão
+            if st.button("🔄 Resetar Guardrails", key=f"reset_guardrails_{selected_agent}"):
+                st.session_state[template_key]["guardrails"] = agent_template["guardrails"]
+                st.rerun()
 
         # -----------------------------------------------------------------
         # BOTÕES DE AÇÃO
@@ -1022,7 +1106,7 @@ def display_sidebar():
 
             # Opção de persistência
             st.markdown("---")
-            st.markdown("##### 💾 Armazenamento")
+            st.markdown('<h5><i class="fa-solid fa-floppy-disk"></i> Armazenamento</h5>', unsafe_allow_html=True)
 
             storage_option = st.radio(
                 "Onde armazenar a base de conhecimento?",
@@ -1100,7 +1184,7 @@ def display_sidebar():
 
             # Seção para carregar base existente do disco
             st.markdown("---")
-            st.markdown("##### 📂 Carregar Base Existente")
+            st.markdown('<h5><i class="fa-solid fa-folder-open"></i> Carregar Base Existente</h5>', unsafe_allow_html=True)
 
             load_path = st.text_input(
                 "Caminho da base salva",
@@ -1131,7 +1215,7 @@ def display_sidebar():
             # Mostra documentos carregados
             if st.session_state.rag_documents:
                 st.markdown("---")
-                st.markdown("**📋 Status da Base:**")
+                st.markdown('<strong><i class="fa-solid fa-clipboard-list"></i> Status da Base:</strong>', unsafe_allow_html=True)
                 for doc_name in st.session_state.rag_documents:
                     st.markdown(f"• {doc_name}")
 
@@ -1238,7 +1322,7 @@ def main():
     # -----------------------------------------------------------------
     # CABEÇALHO
     # -----------------------------------------------------------------
-    st.markdown("<h1 class='main-header'>AI Agent Chat</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='main-header'><i class='fa-solid fa-robot'></i> AI Agent Chat</h1>", unsafe_allow_html=True)
     st.markdown(
         "<p style='text-align: center; color: gray;'>"
         "Trilha Master GenAI • 2026"
